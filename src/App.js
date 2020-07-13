@@ -1,25 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {lazy, Suspense} from 'react';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+
+const Layout = lazy(() => import('./Components/layout/index'));
+const Login = lazy(() => import('./Components/Login.jsx'));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 20 }}>Loading.....</div>}>
+      <Router>
+        <Switch>
+          <Route path='/' exact render={() => <Redirect to='/index' />} />
+          <Route path='/login' component={Login} />
+          <Route path='/index' component={Layout} />
+        </Switch>
+      </Router>
+    </Suspense>
   );
 }
 

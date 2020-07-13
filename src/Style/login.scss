@@ -1,0 +1,48 @@
+.loginBox {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  .loginHeader {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 120px;
+    background-color: #020b21;
+  }
+  .loginBody {
+    position: relative;
+    flex: 1;
+    background-repeat: no-repeat;
+    background-position: 217px 165px;
+    background-color: #f0f2f5;
+  }
+  .loginInput {
+    position: absolute;
+    top: 203px;
+    right: 214px;
+    width: 383px;
+    padding: 52px 30px 75px;
+    background-color: #fff;
+    p {
+      margin-bottom: 54px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: 500;
+      color: #303133;
+    }
+    .ant-select-selector {
+      height: 45px;
+    }
+    .ant-select-selection-item {
+      line-height: 43px;
+    }
+  }
+  footer {
+    height: 75px;
+    line-height: 75px;
+    text-align: center;
+    border-top: 1px solid #e4e7ed;
+    background-color: #f0f2f5;
+  }
+}
