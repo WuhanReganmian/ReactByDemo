@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Select } from "antd";
+import { Form, Input, Button, Select, Row, Col, message } from "antd";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '@/Style/login.scss';
+import fetch from "@/Api";
 
+const { login: loginIn, getEnterprise } = fetch;
 const { Option } = Select;
 // const selectBefore = (
 //   <Select defaultValue="+86" style={{ width: 90, height: 45 }}>
@@ -12,9 +14,34 @@ const { Option } = Select;
 // );
 
 class Login extends Component {
-  onFinish = values => {
+  state = {
+    enterprise: ''
+  }
+
+  onFinish = async values => {
     console.log('Success:', values);
+    const { nationCode, password, username } = values;
+    await this.getEnterprise(username);
+    let params = {
+      phoneNumber: username,
+      password,
+      nationCode,
+      enterpriseId: this.state.enterprise
+    }
+    loginIn(params).then(res => {
+      message.success('登录成功');
+      this.props.history.push('/index');
+    })
   };
+
+  getEnterprise = phoneNumber => {
+    return getEnterprise({ phoneNumber }).then(res => {
+      let result = res.result || [];
+      this.setState({
+        enterprise: result[0].enterpriseId
+      })
+    })
+  }
 
   render() {
     return (
@@ -28,20 +55,28 @@ class Login extends Component {
             <p>GIC商户后台登录</p>
             <Form
               name="basic"
-              initialValues={{ remember: true }}
+              initialValues={{ nationCode: '+86' }}
               onFinish={this.onFinish}
             >
-              <Form.Item
-                name="username"
-                rules={[{ required: true, message: '请输入用户名!' }]}
-              >
-                <Input.Group compact>
-                  <Select defaultValue="+86" style={{ width: 80, height: 45 }}>
-                    <Option value="+86">+86</Option>
-                  </Select>
-                  <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名" style={{ height: 45, width: 244 }} />
-                </Input.Group>
-              </Form.Item>
+
+              <Row>
+                <Col span={6}>
+                  <Form.Item
+                    name="nationCode">
+                    <Select style={{ width: 80, height: 45 }}>
+                      <Option value="+86">+86</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={18}>
+                  <Form.Item
+                    name="username"
+                    rules={[{ required: true, message: '请输入用户名!' }]}
+                  >
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名" style={{ height: 45, width: 244, marginLeft: '-2px' }} />
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Form.Item
                 name="password"

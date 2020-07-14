@@ -9,7 +9,7 @@ function App() {
     <Suspense fallback={<div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 20 }}>Loading.....</div>}>
       <Router>
         <Switch>
-          <Route path='/' exact render={() => <Redirect to='/index' />} />
+          <Route path='/' exact render={() => <Redirect to='/login' />} />
           <Route path='/login' component={Login} />
           <Route path='/index' component={Layout} />
         </Switch>
