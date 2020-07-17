@@ -7,11 +7,6 @@ import fetch from "@/Api";
 
 const { login: loginIn, getEnterprise } = fetch;
 const { Option } = Select;
-// const selectBefore = (
-//   <Select defaultValue="+86" style={{ width: 90, height: 45 }}>
-//     <Option value="+86">+86</Option>
-//   </Select>
-// );
 
 class Login extends Component {
   state = {
@@ -34,7 +29,7 @@ class Login extends Component {
     })
   };
 
-  getEnterprise = phoneNumber => {
+  getEnterprise = phoneNumber => { // 根据用户名搜索企业
     return getEnterprise({ phoneNumber }).then(res => {
       let result = res.result || [];
       this.setState({
@@ -55,9 +50,8 @@ class Login extends Component {
             <p>GIC商户后台登录</p>
             <Form
               name="basic"
-              initialValues={{ nationCode: '+86' }}
-              onFinish={this.onFinish}
-            >
+              initialValues={{ nationCode: '+86', username: 'damogic', password: 'damo2019' }} // 测试环境管理员账号
+              onFinish={this.onFinish}>
 
               <Row>
                 <Col span={6}>
@@ -71,8 +65,7 @@ class Login extends Component {
                 <Col span={18}>
                   <Form.Item
                     name="username"
-                    rules={[{ required: true, message: '请输入用户名!' }]}
-                  >
+                    rules={[{ required: true, message: '请输入用户名!' }]}>
                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名" style={{ height: 45, width: 244, marginLeft: '-2px' }} />
                   </Form.Item>
                 </Col>
@@ -80,8 +73,7 @@ class Login extends Component {
 
               <Form.Item
                 name="password"
-                rules={[{ required: true, message: '请输入密码!' }]}
-              >
+                rules={[{ required: true, message: '请输入密码!' }]}>
                 <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} style={{ height: 45 }} placeholder="请输入密码" />
               </Form.Item>
 
