@@ -25,7 +25,7 @@ class Login extends Component {
     }
     loginIn(params).then(res => {
       message.success('登录成功');
-      this.props.history.push('/index');
+      this.props.history.push('/user-list/user-list');
     })
   };
 

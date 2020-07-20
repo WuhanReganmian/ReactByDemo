@@ -11,7 +11,7 @@ function App() {
         <Switch>
           <Route path='/' exact render={() => <Redirect to='/login' />} />
           <Route path='/login' component={Login} />
-          <Route path='/index' component={Layout} />
+          <Route component={Layout} />
         </Switch>
       </Router>
     </Suspense>
