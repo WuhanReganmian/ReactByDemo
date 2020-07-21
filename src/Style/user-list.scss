@@ -1,0 +1,29 @@
+.userGroup {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 16px solid #f0f2f5;
+  .groupTitle {
+    width: 100px;
+    padding-top: 8px;
+  }
+  .groupList {
+    flex: 1;
+    flex-wrap: wrap;
+  }
+  .groupBtn {
+    width: 190px;
+    padding-top: 8px;
+  }
+  .groupBox {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 26px;
+    cursor: pointer;
+  }
+  .groupActive {
+    color: #2f54ed;
+    border: 1px solid #2f54ed;
+  }
+}

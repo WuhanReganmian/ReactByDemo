@@ -1,31 +1,45 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useLayoutEffect, useEffect } from 'react';
 import { Menu } from 'antd';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const { SubMenu } = Menu;
 
 function AsideMenu(props) {
-  const menu = props.menu || [];
-  const data = menu.find(item => item.menuId === Number(props.menuCheck)) || {};
-  let menuChild = (data.children || []).filter(item => item.isShow === 1);
-
-  const rootSubmenuKeys = menuChild.map(item => item.menuId.toString()); // 可展开菜单
-
-  const routeData = []; // 储存可能跳转的菜单
-  menuChild.forEach(ele => {
-    if(ele.children && ele.children.length) {
-      ele.children = ele.children.filter(item => item.isShow === 1);
-      routeData.push(...ele.children);
-    }
-    !ele.children.length && routeData.push(ele);
-  });
-
-  let history = useHistory();
-  const defaultCheck = routeData.find(item => item.menuUrl === history.location.pathname);
-  let defaultKeys = defaultCheck ? [ defaultCheck.menuId.toString() ] : []
-  console.log(defaultKeys)
-  
+  const [menuData, setMenuData] = useState([]);
+  const [title, setTitle] = useState([]);
+  const [rootSubmenuKeys, setRootSubmenuKeys] = useState([]);
   const [openKey, setOpenKey] = useState([]);
+  const [defaultKey, setDefaultKey] = useState([]);
+  const [routeData, setrouteData] = useState([]); // 储存可能跳转的菜单
+  let history = useHistory();
+
+  useLayoutEffect(_ => {
+    const menu = props.menu || [];
+    const data = menu.find(item => item.menuId === Number(props.menuCheck)) || {};
+    setTitle(data.menuName);
+    let menuChild = (data.children || []).filter(item => item.isShow === 1);
+  
+    const rootSubmenuKeys = menuChild.map(item => item.menuId.toString()); // 可展开菜单
+  
+    const roudata = [];
+    menuChild.forEach(ele => {
+      if(ele.children && ele.children.length) {
+        ele.children = ele.children.filter(item => item.isShow === 1);
+        roudata.push(...ele.children);
+      }
+      !ele.children.length && roudata.push(ele);
+    });
+    setrouteData(roudata)
+    setMenuData(menuChild)
+    setRootSubmenuKeys(rootSubmenuKeys)
+  }, [props.menu, props.menuCheck])
+
+  useEffect(_ => { // 第一次进来默认选中
+    const defaultCheck = routeData.find(item => item.menuUrl === history.location.pathname);
+    let defaultKeys = defaultCheck ? [ defaultCheck.menuId.toString() ] : []
+    console.log(defaultKeys)
+    setDefaultKey(defaultKeys)
+  }, [routeData, history.location.pathname])
 
   const onClick = useCallback(({ key }) => {
     const link = routeData.find(item => item.menuId.toString() === key);
@@ -45,16 +59,16 @@ function AsideMenu(props) {
 
   return (
     <div className="asideMenu">
-      <h3 className="asideMenuTitle">{ data.menuName }</h3>
+      <h3 className="asideMenuTitle">{ title }</h3>
       <Menu
         mode="inline"
         onClick={onClick}
         openKeys={openKey}
-        defaultSelectedKeys={defaultKeys}
+        selectedKeys={defaultKey}
         onOpenChange={onOpenChange}
         style={{ width: '100%' }}>
         {
-          menuChild.map(item => {
+          menuData.map(item => {
             if(item.children && item.children.length) {
               return (
                 <SubMenu key={item.menuId} title={item.menuName}>

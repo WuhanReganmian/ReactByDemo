@@ -33,7 +33,7 @@ function Layout() {
     <div className="layoutClass">
       <Head menu={menuList} menuCheck={menuCheck} onChange={onChangeNav} />
       <div className="layoutContent">
-        {menuList.length && <AsideMenu menu={menuList} menuCheck={menuCheck} />}
+        <AsideMenu menu={menuList} menuCheck={menuCheck} />
         <div className="layoutContext">
           <div className="breadCrumb">
             <Breadcrumb separator=">">
