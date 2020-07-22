@@ -10,6 +10,15 @@ let api1 = {
     url: '/query-user-group-list', // 查询该企业下所有用户组
     method: 'post'
   },
+  getAdminGroupList: {
+    url: '/get-user-group-list', // 获取管理员用户组信息
+    method: 'post',
+    useFormData: true
+  },
+  addGroupList: {
+    url: '/save-user-group-info', // 用户分组新增
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');
