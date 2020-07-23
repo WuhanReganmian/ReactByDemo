@@ -6,17 +6,18 @@ import '@/Style/components.scss';
 const { getAdminGroupList } = fetch;
 const { Option } = Select;
 
-function GroupAccount() {
+function GroupAccount(props) {
   const [accountList, setAccountList] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
 
   useEffect(_ => {
     getAdminGroupList().then(res => {
       let { result } = res.result || [];
-      let options = result.map(item => <Option key={item.enterUserGroupId}>{item.enterUserGroupName}</Option>)
+      let options = result.map(item => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>)
       setAccountList(options);
     })
-  }, [])
+    setShowOptions(props.accountVal === 2 ? true : false)
+  }, [props.accountVal])
 
   const radioChange = e => {
     setShowOptions(e.target.value === 2 ? true : false)
@@ -35,19 +36,19 @@ function GroupAccount() {
         </Radio.Group>
       </Form.Item>
       {showOptions &&
-      <Form.Item
-        name="groupChoose"
-        label=" "
-        colon={false}
-        className="cancelStar"
-        rules={ [ {required: true, message: '请选择账号分组'} ] }>
-        <Select
-          mode="multiple"
-          style={{ width: 440 }}
-          placeholder="请选择账号分组 (可多选)">
-          {accountList}
-        </Select>
-      </Form.Item>}
+        <Form.Item
+          name="groupChoose"
+          label=" "
+          colon={false}
+          className="cancelStar"
+          rules={ [ {required: true, message: '请选择账号分组'} ] }>
+          <Select
+            mode="multiple"
+            style={{ width: 440 }}
+            placeholder="请选择账号分组 (可多选)">
+            {accountList}
+          </Select>
+        </Form.Item>}
     </>
   )
 }

@@ -27,3 +27,43 @@
     border: 1px solid #2f54ed;
   }
 }
+.groupConfig {
+  max-height: 300px;
+  overflow: auto;
+  .configBox {
+    display: flex;
+    justify-content: space-between;
+    span:first-child {
+      color: #303133;
+    }
+    span:last-child {
+      color: #606266;
+    }
+  }
+}
+.addBtn {
+  margin-top: 20px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #c4c6cf;
+  border-radius: 2px;
+  cursor: pointer;
+  &:hover {
+    color: #597ef7;
+    border-color: #597ef7;
+  }
+}
+.userContent {
+  padding: 20px;
+  .contentHeader {
+    padding-bottom: 20px;
+    font-size: 16px;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+}

@@ -19,6 +19,22 @@ let api1 = {
     url: '/save-user-group-info', // 用户分组新增
     method: 'post'
   },
+  checkGroupLimit: {
+    url: '/edit-user-group', // 是否有用户组编辑权限
+    method: 'post'
+  },
+  delGroupList: {
+    url: '/del-user-group-info', // 删除用户组
+    method: 'post'
+  },
+  getGroupDetail: {
+    url: '/get-user-group-info', // 获取用户分组信息
+    method: 'post'
+  },
+  saveGroupList: {
+    url: '/update-user-group-info', // 用户分组修改
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');

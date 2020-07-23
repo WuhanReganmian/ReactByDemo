@@ -5,14 +5,25 @@
   height: 100vh;
   .loginHeader {
     display: flex;
+    justify-content: center;
     align-items: center;
     height: 50px;
     padding: 0 120px;
     background-color: #020b21;
+    .headerContent {
+      width: 1440px;
+    }
   }
   .loginBody {
     position: relative;
     flex: 1;
+    display: flex;
+    justify-content: center;
+    background-color: #f0f2f5;
+  }
+  .loginBodyContent {
+    width: 1440px;
+    height: 100%;
     background-repeat: no-repeat;
     background-position: 217px 165px;
     background-color: #f0f2f5;
