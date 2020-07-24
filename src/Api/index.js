@@ -35,6 +35,14 @@ let api1 = {
     url: '/update-user-group-info', // 用户分组修改
     method: 'post'
   },
+  getHeadFieldsList: {
+    url: '/query-user-list-head-info', // 获取用户列表头信息
+    method: 'post'
+  },
+  getUserDataList: {
+    url: '/query-cu-index-info', // 获取用户列表数据
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');

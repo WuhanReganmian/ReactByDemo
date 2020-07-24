@@ -7,7 +7,7 @@ import fetch from '@/Api';
 const { queryGroupList, addGroupList, checkGroupLimit, delGroupList, getGroupDetail, saveGroupList } = fetch;
 const { confirm } = Modal;
 
-function UserGroup() { // 分组
+function UserGroup(props) { // 分组
   const [groupList, setGroupList] = useState([]);
   const [groupCheck, setGroupCheck] = useState('');
   const [groupVisible, setGroupVisible] = useState(false);
@@ -16,21 +16,25 @@ function UserGroup() { // 分组
   const [groupId, setGroupId] = useState(0);
   const [groupForm] = Form.useForm();
 
-  useLayoutEffect(_ => { // created
-    getGroupList();
-  }, [])
-
-  const getGroupList = _ => { // 获取分组列表
+  
+  const getGroupList = useCallback(_ => { // 获取分组列表
     queryGroupList().then(res => {
       let result = res.result || []
       setGroupList(result);
-      setGroupCheck(result.length ? result[0].userGroupId : '');
+      let userId = result.length ? result[0].userGroupId : ''
+      setGroupCheck(userId);
+      props.change(userId);
     })
-  }
+  }, [props])
+
+  useLayoutEffect(_ => { // created
+    getGroupList();
+  }, [getGroupList])
 
   const changeActive = useCallback(id => { // 切换分组
     setGroupCheck(id)
-  }, [])
+    props.change(id);
+  }, [props])
 
   const handleGroupCancel = _ => { // 关闭新建分组
     setGroupVisible(false);
@@ -101,7 +105,7 @@ function UserGroup() { // 分组
         })
       },
     });
-  }, [])
+  }, [getGroupList])
   const checkLimit = useCallback((userGroupId, type) => { // 检查操作权限
     checkGroupLimit({ userGroupId }).then(res => {
       if(!res.result) return message.warning('您没有权限操作');
@@ -161,7 +165,7 @@ function UserGroup() { // 分组
             label="人群筛选">
             <Input />
           </Form.Item>
-          <GroupAccount accountVal={groupForm.getFieldValue('account')} />
+          <GroupAccount accountVal={groupForm} />
         </Form>
         {groupForm.title}
       </Modal>

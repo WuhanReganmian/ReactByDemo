@@ -37,7 +37,6 @@ function AsideMenu(props) {
   useEffect(_ => { // 第一次进来默认选中
     const defaultCheck = routeData.find(item => item.menuUrl === history.location.pathname);
     let defaultKeys = defaultCheck ? [ defaultCheck.menuId.toString() ] : []
-    console.log(defaultKeys)
     setDefaultKey(defaultKeys)
   }, [routeData, history.location.pathname])
 
@@ -47,9 +46,7 @@ function AsideMenu(props) {
   }, [routeData, history]);
 
   const onOpenChange = openKeys => { // 点击菜单，收起其他展开的所有菜单
-    console.log(openKeys)
     const latestOpenKey = openKeys.find(key => openKey.indexOf(key) === -1);
-    console.log(latestOpenKey)
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       setOpenKey(openKeys)
     } else {

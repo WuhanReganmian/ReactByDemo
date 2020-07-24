@@ -21,7 +21,6 @@ function Layout() {
   }, [])
 
   const onChangeNav = id => {
-    console.log(id)
     setMenuCheck(id)
   }
 
@@ -52,7 +51,7 @@ function Layout() {
                         <Route
                           key={item.path}
                           path={item.path}
-                          render={props => <item.component bread={changeBread} {...props} style={{  }} />} />
+                          render={props => <item.component bread={changeBread} {...props} />} />
                       )
                     })
                   }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 // import { Button, Space, Modal, Form, Input, message } from 'antd';
 import '@/Style/user-list.scss';
 import UserGroup from './user-list-group';
@@ -15,13 +15,19 @@ const bread = [
 
 
 function UserList(props) {
+  const [userGroupId, setUserGroupId] = useState('')
   useLayoutEffect(() => {
     props.bread(bread);
   }, [props])
+
+  const groupIdChange = id => {
+    setUserGroupId(id || '')
+  }
+
   return (
     <div className="routeContent">
-      <UserGroup />
-      <UserContent />
+      <UserGroup change={groupIdChange} />
+      <UserContent groupId={userGroupId} />
     </div>
   )
 }

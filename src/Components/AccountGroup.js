@@ -16,7 +16,8 @@ function GroupAccount(props) {
       let options = result.map(item => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>)
       setAccountList(options);
     })
-    setShowOptions(props.accountVal === 2 ? true : false)
+    let bool = props.accountVal.getFieldValue('account') === 2 ? true : false;
+    setShowOptions(bool)
   }, [props.accountVal])
 
   const radioChange = e => {

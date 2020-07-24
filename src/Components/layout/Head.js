@@ -3,14 +3,13 @@ import { Menu, Dropdown } from 'antd'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 function Options(props) {
-  let arr = props.value;
   return (
     <Menu
       onClick={props.onClick}
       selectable={false}
       theme="dark">
       {
-        arr.map(item => {
+        props.value.map(item => {
           return (
             item.isShow === 1 &&
             <Menu.Item key={item.menuId}>
@@ -24,14 +23,12 @@ function Options(props) {
 }
 
 function Head(props) {
-  let arr = props.menu || [];
   let history = useHistory();
 
   const onClick = useCallback((item, { key }) => { // 子选项跳转
     const { children, menuId } = item;
     props.onChange(menuId);
-    // eslint-disable-next-line
-    let data = children.find(ele => ele.menuId == key);
+    let data = children.find(ele => ele.menuId.toString() === key);
     if(data && data.menuUrl) {
       history.push(data.menuUrl);
     } else if(data.children && data.children.length) {
@@ -53,7 +50,7 @@ function Head(props) {
     <div className="headClass">
       <img src="assets/menu-logo-2.png" alt="" />
       {
-        arr.map((item, index) => {
+        props.menu.map((item, index) => {
           return (
             item.isShow === 1 &&
             (item.children ? 
