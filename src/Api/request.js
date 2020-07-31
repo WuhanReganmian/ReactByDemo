@@ -76,7 +76,7 @@ axios.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   let res = error.response || {};
   let data = res.data || {};
-  message.error(data.message);
+  message.error(data.message || '网络连接中断');
   return Promise.reject(data);
 });
 export default request;

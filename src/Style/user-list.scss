@@ -67,3 +67,68 @@
     margin-bottom: 20px;
   }
 }
+.popoverEcuStyle {
+  display: flex;
+  color: #606266;
+  margin-bottom: 20px;
+  span {
+    font-size: 12px;
+  }
+  .infoDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .firstRow {
+      color: #909399;
+      span {
+        font-size: 14px;
+        &:first-child {
+          color: #303133;
+        }
+        &:not(:last-child) {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+}
+.popoverCardStyle {
+  height: 84px;
+  display: flex;
+  justify-content: space-between;
+  .numCard {
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    div {
+      text-align: center;
+      &:first-child {
+        color: #303133;
+      }
+      &:last-child {
+        color: #606266;
+      }
+    }
+  }
+}
+.popImg,
+.popImg1 {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 2px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+.popImg1 {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+}
+.showEllipsis {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

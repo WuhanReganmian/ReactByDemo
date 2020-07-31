@@ -43,6 +43,10 @@ let api1 = {
     url: '/query-cu-index-info', // 获取用户列表数据
     method: 'post'
   },
+  getUserInfo: {
+    url: '/ecu-popout-info', // 用户信息弹框
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');

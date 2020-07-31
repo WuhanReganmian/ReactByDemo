@@ -50,7 +50,7 @@ function Head(props) {
     <div className="headClass">
       <img src="assets/menu-logo-2.png" alt="" />
       {
-        props.menu.map((item, index) => {
+        (props.menu || []).map((item, index) => {
           return (
             item.isShow === 1 &&
             (item.children ? 

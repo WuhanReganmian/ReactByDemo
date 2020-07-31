@@ -1,24 +1,19 @@
-import React, {useState, useEffect, Suspense} from 'react';
+import React, {useState, Suspense} from 'react';
 import Head from './Head';
 import AsideMenu from './AsideMenu';
 import '@/Style/layout.scss';
 import routes from '@/Router';
 import fetch from '@/Api';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min';
+import { useRequest } from '@umijs/hooks';
 import { Breadcrumb } from 'antd';
 
 const { getMenuList } = fetch;
 
 function Layout() {
-  const [menuList, setMenuList] = useState([]);
+  const { data: menuList } = useRequest(getMenuList, { formatResult: data => data.result || [] })
   const [menuCheck, setMenuCheck] = useState(20000);
   const [bread, setBread] = useState([])
-
-  useEffect(() => {
-    getMenuList().then(res => {
-      setMenuList(res.result || []);
-    })
-  }, [])
 
   const onChangeNav = id => {
     setMenuCheck(id)

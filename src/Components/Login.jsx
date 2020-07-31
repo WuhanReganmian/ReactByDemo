@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Form, Input, Button, Select, Row, Col, message } from "antd";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useRequest } from '@umijs/hooks';
 import '@/Style/login.scss';
 import fetch from "@/Api";
 
@@ -9,32 +10,27 @@ const { login: loginIn, getEnterprise } = fetch;
 const { Option } = Select;
 
 function Login() {
-  // const [enterprise, setEnterprise] = useState(0);
-  const enterRef = useRef(0);
+  const { loading: logLoading, run: loginRequest } = useRequest(loginIn, { manual: true });
+  const { run: getEnterRun } = useRequest(getEnterprise, { manual: true });
   const history = useHistory();
 
   const onFinish = async values => { // 登录
     const { nationCode, password, username } = values;
-    await getEnterpriseList(username);
+    let enterpriseId;
+    await getEnterRun({ phoneNumber: username }).then(res => { // 根据用户名搜索企业
+      enterpriseId = (res.result || [])[0].enterpriseId;
+    })
     let params = {
       phoneNumber: username,
       password,
       nationCode,
-      enterpriseId: enterRef.current
+      enterpriseId
     }
-    loginIn(params).then(res => {
+    loginRequest(params).then(_ => {
       message.success('登录成功');
       history.push('/user-list/user-list');
     })
   };
-
-  const getEnterpriseList = phoneNumber => { // 根据用户名搜索企业
-    return getEnterprise({ phoneNumber }).then(res => {
-      let result = res.result || [];
-      // setEnterprise(result[0].enterpriseId)
-      enterRef.current = result[0].enterpriseId;
-    })
-  }
 
   return (
     <div className='loginBox'>
@@ -78,7 +74,7 @@ function Login() {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit" style={{ height: 45, width: '100%' }}>
+                <Button type="primary" htmlType="submit" style={{ height: 45, width: '100%' }} loading={logLoading}>
                   登录
                 </Button>
               </Form.Item>

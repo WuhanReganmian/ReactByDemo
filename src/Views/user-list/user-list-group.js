@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, Space, Modal, Form, Input, message } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import GroupAccount from '@/Components/AccountGroup';
+import { useRequest } from '@umijs/hooks';
 import fetch from '@/Api';
 
 const { queryGroupList, addGroupList, checkGroupLimit, delGroupList, getGroupDetail, saveGroupList } = fetch;
@@ -16,20 +17,35 @@ function UserGroup(props) { // 分组
   const [groupId, setGroupId] = useState(0);
   const [groupForm] = Form.useForm();
 
-  
-  const getGroupList = useCallback(_ => { // 获取分组列表
-    queryGroupList().then(res => {
+  const { run: getGroupRun } = useRequest(queryGroupList, { // 获取用户列表
+    onSuccess: res => {
       let result = res.result || []
       setGroupList(result);
       let userId = result.length ? result[0].userGroupId : ''
       setGroupCheck(userId);
       props.change(userId);
-    })
-  }, [props])
-
-  useLayoutEffect(_ => { // created
-    getGroupList();
-  }, [getGroupList])
+    }
+   })
+  const { run: newGroup } = useRequest(addGroupList, { // 新建分组接口
+    manual: true,
+    onSuccess: _ => {
+      getGroupRun();
+      message.success('新建成功');
+      setGroupVisible(false);
+      setGroupLoading(false);
+    },
+    onError: _ => setGroupLoading(false)
+  })
+  const { run: saveGroup } = useRequest(saveGroupList, { // 保存分组接口
+    manual: true,
+    onSuccess: _ => {
+      getGroupRun();
+      message.success('保存成功');
+      setGroupVisible(false);
+      setGroupLoading(false);
+    },
+    onError: _ => setGroupLoading(false)
+  })
 
   const changeActive = useCallback(id => { // 切换分组
     setGroupCheck(id)
@@ -52,19 +68,9 @@ function UserGroup(props) { // 分组
         userGroupId: groupId || undefined
       }
       if(groupId) {
-        saveGroupList(params).then(res => {
-          getGroupList();
-          message.success('保存成功');
-          setGroupVisible(false);
-          setGroupLoading(false);
-        }).catch(_ => setGroupLoading(false))
+        saveGroup(params)
       } else {
-        addGroupList(params).then(res => {
-          getGroupList();
-          message.success('新建成功');
-          setGroupVisible(false);
-          setGroupLoading(false);
-        }).catch(_ => setGroupLoading(false))
+        newGroup(params)
       }
     })
   }
@@ -79,8 +85,9 @@ function UserGroup(props) { // 分组
   const handleConfigCancel = _ => { // 关闭分组管理
     setGroupConfig(false);
   }
-  const openEditGroup = useCallback(userGroupId => { // 编辑打开
-    getGroupDetail({ userGroupId }).then(res => {
+  const { run: openEditGroup } = useRequest(getGroupDetail, { // 编辑打开
+    manual: true,
+    onSuccess: (res, params) => {
       const { groupName, editType, editUserGroupList } = res.result || {};
       groupForm.setFieldsValue({
         title: groupName || '',
@@ -88,9 +95,9 @@ function UserGroup(props) { // 分组
         groupChoose: editUserGroupList || []
       })
       openGroupModal();
-      setGroupId(userGroupId)
-    })
-  }, [groupForm])
+      setGroupId(params[0].userGroupId)
+    }
+  })
   const delGroup = useCallback(userGroupId => { // 删除分组
     confirm({
       title: '提示',
@@ -100,17 +107,17 @@ function UserGroup(props) { // 分组
       cancelText: '取消',
       onOk() {
         return delGroupList({ userGroupId }).then(res => {
-          getGroupList();
+          getGroupRun();
           message.success('删除成功');
         })
       },
     });
-  }, [getGroupList])
+  }, [getGroupRun])
   const checkLimit = useCallback((userGroupId, type) => { // 检查操作权限
     checkGroupLimit({ userGroupId }).then(res => {
       if(!res.result) return message.warning('您没有权限操作');
       type === 2 && delGroup(userGroupId);
-      type === 1 && openEditGroup(userGroupId)
+      type === 1 && openEditGroup({userGroupId})
     })
   }, [delGroup, openEditGroup])
 
