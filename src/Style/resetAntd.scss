@@ -1,3 +1,11 @@
 .ant-table-thead > tr > th {
   background-color: #ebecf0;
 }
+.ant-btn.ant-btn-text {
+  padding: 0;
+  margin-right: 13px;
+  color: #1890ff;
+}
+.ant-btn-text:hover, .ant-btn-text:focus {
+  background-color: transparent;
+}

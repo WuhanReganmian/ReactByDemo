@@ -47,6 +47,10 @@ let api1 = {
     url: '/ecu-popout-info', // 用户信息弹框
     method: 'post'
   },
+  queryFreezingList: {
+    url: '/query-member-freeze-list', // 获取冻结列表
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');

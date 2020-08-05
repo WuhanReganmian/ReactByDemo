@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Select, Table, Popover, Pagination } from 'antd';
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { Input, Select, Table, Popover, Pagination, Modal } from 'antd';
+import { SearchOutlined, SettingOutlined, EnvironmentOutlined, TabletOutlined } from '@ant-design/icons';
 import fetch from '@/Api';
 import defaultImg from '@/Images/member_img.png';
 import { useRequest } from '@umijs/hooks';
@@ -9,7 +9,6 @@ import { useRequest } from '@umijs/hooks';
 const { getHeadFieldsList, getUserDataList, getUserInfo } = fetch;
 
 const { Option } = Select;
-// eslint-disable-next-line
 const { Column, ColumnGroup } = Table;
 
 const filterData = (name, propData) => { // 过滤数据
@@ -62,6 +61,14 @@ const filterMultiData = (mergeShowPropName, propData) => { // 带图片的数据
 
 function UserPopover(props) { // 用户信息弹框
   const [infoData, setInfoData] = useState({});
+  const { run: getInfoRun } = useRequest(getUserInfo, { // 获取信息
+    manual: true,
+    onSuccess: res => {
+      const { result = {} } = res || {};
+      result.headUrl = result.headUrl || defaultImg;
+      setInfoData(result);
+    }
+  })
 
   const popContent = useCallback(_ => {
     return (
@@ -75,11 +82,11 @@ function UserPopover(props) { // 用户信息弹框
               <span>{ infoData.age || '--' }岁</span>
             </div>
             <div>
-              <i className="el-icon-location-outline" style={{marginRight: 10, fontSize: 16}}></i>
+              <EnvironmentOutlined style={{marginRight: 10, fontSize: 16}} />
               <span>{ infoData.residentCity || '--' }</span>
             </div>
             <div>
-              <i className="font_family icon-mobile" style={{marginRight: 10, fontSize: 16}}></i>
+              <TabletOutlined style={{marginRight: 10, fontSize: 16}} />
               <span>{ infoData.phone || '--' }</span>
             </div>
           </div>
@@ -111,12 +118,8 @@ function UserPopover(props) { // 用户信息弹框
     )
   }, [infoData])
   const onVisibleChange = useCallback((visible, propData) => {
-    visible && getUserInfo({ ecuId: propData.id }).then(res => {
-      const { result = {} } = res || {};
-      result.headUrl = result.headUrl || defaultImg;
-      setInfoData(result);
-    })
-  }, [])
+    visible && getInfoRun({ ecuId: propData.id })
+  }, [getInfoRun])
 
   return (
     <Popover
@@ -154,12 +157,40 @@ function DataDealing(props) { // 判断表格内容
   }
 }
 
+function HeadEditModal(props) { // 修改表格头Modal
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const handleOk = _ => {
+    setConfirmLoading(true);
+  };
+
+  const handleCancel = _ => {
+    props.closed(false);
+  }
+
+  return (
+    <Modal
+      title="自定义字段列表"
+      visible={props.visible}
+      okText="保存"
+      cancelText="取消"
+      onOk={handleOk}
+      confirmLoading={confirmLoading}
+      onCancel={handleCancel}>
+      <p>测试</p>
+    </Modal>
+  )
+}
+
 function UserContent(props) {
   const [headList, setHeadList] = useState([]);
+  // const [inputData, setInputData] = useState('');
+  const inputData = useRef('');
   const [tableData, setTableData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [visible, setVisible] = useState(false);
   // eslint-disable-next-line
-  const head = useRequest(_ => { // 获取头数据
+  const { run: getHeadRun } = useRequest(_ => { // 获取头数据
     return getHeadFieldsList({ userGroupId: props.groupId })
   }, {
     refreshDeps: [props.groupId],
@@ -178,10 +209,10 @@ function UserContent(props) {
       setHeadList(headData)
     }
   })
-  const { pagination, loading } = useRequest( // 获取表格数据
+  const { pagination, loading, run: geTableRun } = useRequest( // 获取表格数据
     ({ current, pageSize }) => {
       let params = {
-        keyword: undefined,
+        keyword: inputData.current || undefined,
         userGroupId: props.groupId,
         currentPage: current,
         pageSize,
@@ -223,13 +254,18 @@ function UserContent(props) {
     ));
   }
   const onPressEnter = e => { // 回车搜索
-
+    inputData.current = e.target.value;
+    geTableRun(pagination)
   }
+  const openModal = useCallback((bool, type) => {
+    setVisible(bool);
+    type && getHeadRun();
+  }, [getHeadRun])
 
   const lastTitle = ( // 自定义表头
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div>操作</div>
-      <SettingOutlined style={{fontSize: 20, cursor: 'pointer'}} />
+      <SettingOutlined style={{fontSize: 20, cursor: 'pointer'}} onClick={_ => openModal(true)} />
     </div>
   )
 
@@ -260,6 +296,7 @@ function UserContent(props) {
         }}
         dataSource={tableData}
         rowKey={record => record.id}
+        pagination={false}
         loading={loading}>
         { getHeadBody() }
         <Column
@@ -270,13 +307,14 @@ function UserContent(props) {
       </Table>
       <Pagination
         {...pagination}
-        showQuickJumper
         showSizeChanger
+        total={total}
         onShowSizeChange={pagination.onChange}
         style={{
           marginTop: 16,
           textAlign: 'right',
         }} />
+      <HeadEditModal visible={visible} closed={type => openModal(false, type)} />
     </div>
   )
 }

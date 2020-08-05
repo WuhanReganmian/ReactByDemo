@@ -1,11 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
-// import { Button, Space, Modal, Form, Input, message } from 'antd';
 import '@/Style/user-list.scss';
 import UserGroup from './user-list-group';
 import UserContent from './user-list-content';
-// import fetch from '@/Api';
-
-// const {  } = fetch;
 
 const bread = [
   {
