@@ -41,7 +41,7 @@ function Layout() {
               <Router>
                 <Switch>
                   {
-                    routes.map(item => {
+                    routes?.map(item => {
                       return (
                         <Route
                           key={item.path}

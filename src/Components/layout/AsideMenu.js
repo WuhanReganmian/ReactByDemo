@@ -14,8 +14,7 @@ function AsideMenu(props) {
   let history = useHistory();
 
   useLayoutEffect(_ => {
-    const menu = props.menu || [];
-    const data = menu.find(item => item.menuId === Number(props.menuCheck)) || {};
+    const data = props.menu?.find(item => item.menuId === Number(props.menuCheck)) ?? {};
     setTitle(data.menuName);
     let menuChild = (data.children || []).filter(item => item.isShow === 1);
   
@@ -23,7 +22,7 @@ function AsideMenu(props) {
   
     const roudata = [];
     menuChild.forEach(ele => {
-      if(ele.children && ele.children.length) {
+      if(ele.children?.length) {
         ele.children = ele.children.filter(item => item.isShow === 1);
         roudata.push(...ele.children);
       }

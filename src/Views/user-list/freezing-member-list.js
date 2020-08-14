@@ -26,7 +26,7 @@ function FreezingMemberList(props) {
     paginated: true,
     defaultPageSize: 20,
     onSuccess: res => {
-      const { totalCount, result } = res.result || {};
+      const { totalCount, result } = res?.result ?? {};
       setTotal(totalCount ? Number(totalCount) : 0);
       let table = [];
       (result || []).forEach(item => {

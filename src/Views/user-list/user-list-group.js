@@ -21,7 +21,7 @@ function UserGroup(props) { // 分组
     onSuccess: res => {
       let result = res.result || []
       setGroupList(result);
-      let userId = result.length ? result[0].userGroupId : ''
+      let userId = result?.[0].userGroupId
       setGroupCheck(userId);
       props.change(userId);
     }

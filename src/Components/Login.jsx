@@ -18,7 +18,7 @@ function Login() {
     const { nationCode, password, username } = values;
     let enterpriseId;
     await getEnterRun({ phoneNumber: username }).then(res => { // 根据用户名搜索企业
-      enterpriseId = (res.result || [])[0].enterpriseId;
+      enterpriseId = res.result?.[0]?.enterpriseId;
     })
     let params = {
       phoneNumber: username,

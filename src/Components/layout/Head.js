@@ -29,9 +29,9 @@ function Head(props) {
     const { children, menuId } = item;
     props.onChange(menuId);
     let data = children.find(ele => ele.menuId.toString() === key);
-    if(data && data.menuUrl) {
+    if(data?.menuUrl) {
       history.push(data.menuUrl);
-    } else if(data.children && data.children.length) {
+    } else if(data.children?.length) {
       history.push(data.children[0].menuUrl);
     }
   }, [history, props])
@@ -41,7 +41,7 @@ function Head(props) {
     props.onChange(menuId);
     if(menuUrl) {
       history.push(menuUrl);
-    } else if(children && children.length) {
+    } else if(children?.length) {
       history.push(children[0].menuUrl);
     }
   }, [history, props])
