@@ -132,3 +132,67 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.maxBox {
+  margin-top: 20px;
+  max-height: 540px;
+  overflow: auto;
+  .upBox {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+.fieldBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 122px;
+  height: 32px;
+  border: 1px solid #dcdfe6;
+  margin: 0 15px 15px 0;
+  border-radius: 2px;
+  cursor: pointer;
+  &:nth-of-type(5n) {
+    margin-right: 0;
+  }
+  &.active {
+    border: 1px solid #2f54ed;
+    background-color: #2f54ed;
+    color: #fff;
+  }
+}
+.domainBox {
+  margin-top: 16px;
+  border: 1px solid #dcdfe6;
+  padding: 15px 15px 0;
+  .upsideOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .underpart {
+    display: flex;
+    flex-wrap: wrap;
+    .fieldBox {
+      margin-right: 10px;
+    }
+  }
+}
+.addBigBtn {
+  margin-top: 20px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #c4c6cf;
+  border-radius: 2px;
+  cursor: pointer;
+  // span:first-of-type {
+  //   font-size: 20px;
+  //   margin-right: 8px;
+  // }
+  &:hover {
+    color: #597ef7;
+    border-color: #597ef7;
+  }
+}

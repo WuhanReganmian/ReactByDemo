@@ -5,8 +5,8 @@ function getFetch(api = {}, baseUrl) {
     let data = api[item];
     if(typeof data === 'string') data = { url: data };
     data.url = `${baseUrl}${data.url}`
-    const { url, method, useFormdata } = data;
-    api[item] = params => request(url, params, useFormdata, method)
+    const { url, method, useFormData } = data;
+    api[item] = params => request(url, params, useFormData, method)
   })
   return api
 }

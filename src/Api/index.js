@@ -51,6 +51,24 @@ let api1 = {
     url: '/query-member-freeze-list', // 获取冻结列表
     method: 'post'
   },
+  getAllDomainList: {
+    url: '/query-all-area-info', // 获取配置用户列表域
+    method: 'post',
+    useFormData: true
+  },
+  getAllFieldsList: {
+    url: '/get-user-list-field', // 自定义字段查询
+    method: 'post'
+  },
+  changeDomainFieldsList: {
+    url: '/get-cu-user-field', // 获取某个域自定义用户字段信息
+    method: 'post',
+    useFormData: true
+  },
+  toChangeUserFields: {
+    url: '/save-user-list-field', // 保存用户列表自定义字段
+    method: 'post'
+  },
 }
 
 api = getFetch(api, '/gic-auth-web');
