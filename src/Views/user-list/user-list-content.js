@@ -495,8 +495,7 @@ function UserContent(props) {
     }
   })
   const { pagination, loading, run: geTableRun } = useRequest( // 接口：获取表格数据
-    () => {
-      const { current, pageSize } = pagination;
+    ({ current, pageSize }) => {
       let params = {
         keyword: inputData.current || undefined,
         userGroupId: props.groupId,
@@ -541,7 +540,7 @@ function UserContent(props) {
   }
   const onPressEnter = e => { // 回车搜索
     inputData.current = e.target.value;
-    geTableRun()
+    geTableRun(pagination)
   }
   const openModal = useCallback((bool, type) => { // 打开/关闭自定义字段
     setVisible(bool);
