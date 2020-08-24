@@ -99,7 +99,7 @@ function FreezingMemberList(props) {
   ];
 
   return (
-    <div className="routeContent freezingMemberList">
+    <div className="freezingMemberList">
       <header>
         
       </header>

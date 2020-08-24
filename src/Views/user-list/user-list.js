@@ -12,7 +12,7 @@ const bread = [
 
 function UserList(props) {
   const [userGroupId, setUserGroupId] = useState('')
-  useLayoutEffect(() => {
+  useLayoutEffect(_ => {
     props.bread(bread);
   }, [props])
 
@@ -21,10 +21,10 @@ function UserList(props) {
   }
 
   return (
-    <div className="routeContent">
+    <>
       <UserGroup change={groupIdChange} />
       <UserContent groupId={userGroupId} />
-    </div>
+    </>
   )
 }
 

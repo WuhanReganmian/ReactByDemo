@@ -4,11 +4,19 @@ import AsideMenu from './AsideMenu';
 import '@/Style/layout.scss';
 import routes from '@/Router';
 import fetch from '@/Api';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min';
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { useRequest } from '@umijs/hooks';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Spin } from 'antd';
 
 const { getMenuList } = fetch;
+
+function Loading() {
+  return (
+    <div style={{ width: '100%', height: 500, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Spin />
+    </div>
+  )
+}
 
 function Layout() {
   const { data: menuList } = useRequest(getMenuList, { formatResult: data => data.result || [] })
@@ -37,22 +45,25 @@ function Layout() {
             </Breadcrumb>
           </div>
           <div className="routeBackground">
-            <Suspense fallback={<div>Loading</div>}>
-              <Router>
-                <Switch>
-                  {
-                    routes?.map(item => {
-                      return (
-                        <Route
-                          key={item.path}
-                          path={item.path}
-                          render={props => <item.component bread={changeBread} {...props} />} />
-                      )
-                    })
-                  }
-                </Switch>
-              </Router>
-            </Suspense>
+            <div className="routeContent">
+              <Suspense fallback={<Loading />}>
+                <Router>
+                  <Switch>
+                    {
+                      routes?.map(item => {
+                        return (
+                          <Route
+                            key={item.path}
+                            path={item.path}
+                            render={props => <item.component bread={changeBread} {...props} />} />
+                        )
+                      })
+                    }
+                    <Redirect to='/404' />
+                  </Switch>
+                </Router>
+              </Suspense>
+            </div>
           </div>
         </div>
       </div>

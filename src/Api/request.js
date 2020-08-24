@@ -63,8 +63,7 @@ axios.interceptors.response.use(function (response) {
     let data = response.data;
     const { code, message: msg } = data;
     if(code === notAuthCode) {
-      // window.location.href = `${window.location.origin}/#/login`;
-      window.location.href = '/login';
+      window.location.href = `${window.location.origin}/#/login`;
       return;
     } else if(code !== succCode) {
       message.error(msg)
