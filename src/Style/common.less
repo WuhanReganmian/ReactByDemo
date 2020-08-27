@@ -2,7 +2,6 @@
  * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
  * http://cssreset.com
  */
-@import "./colors.less";
 html,
 body,
 div,
@@ -89,7 +88,7 @@ input {
   border: 0;
   font-size: 100%;
   font-weight: normal;
-  vertical-align: baseline;
+  // vertical-align: baseline;
   box-sizing: border-box;
 }
 
@@ -144,13 +143,13 @@ li {
 }
 
 input::-webkit-input-placeholder{
-  color: @gray-placeholder;
+  color: #c0c4cc;
 }
 input:-ms-input-placeholder{
-  color: @gray-placeholder;
+  color: #c0c4cc;
 }
 input::-moz-placeholder{
-  color: @gray-placeholder;
+  color: #c0c4cc;
 }
 
 
@@ -273,7 +272,7 @@ scrollbar[orient="vertical"] {
 html, body {
   width: 100%;
   height: 100%;
-  background-color: @gray-background;
+  background-color: #f0f2f5;
   font-size: 14px;
   font-family: Roboto,Helvetica Neue,Helvetica,Tahoma,Arial,PingFang SC,Microsoft YaHei;
 }
@@ -284,24 +283,4 @@ body {
 input:focus {
   box-shadow: none;
   outline: none;
-}
-
-header {
-  font-size: 14px;
-  font-weight: 700;
-  color: @gray01;
-}
-.main .el-button--primary:focus, .el-button--primary:focus{
-  color: #fff;
-  background-color: @blue;
-  border-color: @blue;
-}
-.main .el-button--text:focus {
-  color: @blue;
-}
-.defineColor .el-color-dropdown__btns .el-color-dropdown__value+button {
-  display: none !important;
-}
-.el-loading-mask {
-  z-index: 800 !important;
 }

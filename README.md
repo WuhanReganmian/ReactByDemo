@@ -38,7 +38,7 @@
 ```
 
 ## 技术栈
-  - React
-  - Ant-design
+  - React 16.13.1
+  - Ant-design 4.4.1
   - Umi hooks
   - Axios

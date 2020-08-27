@@ -163,7 +163,7 @@
 .domainBox {
   margin-top: 16px;
   border: 1px solid #dcdfe6;
-  padding: 15px 15px 0;
+  padding: 15px 0 0 15px;
   .upsideOptions {
     display: flex;
     justify-content: space-between;
@@ -191,4 +191,12 @@
     color: #597ef7;
     border-color: #597ef7;
   }
+}
+// 表头边框
+.ant-table-container table > thead > tr:first-child th {
+  border-right: 1px solid #dcdfe6;
+}
+.ant-table-container table > thead > tr:last-child th {
+  border-right: 1px solid #dcdfe6;
+  border-top: 1px solid #dcdfe6;
 }
