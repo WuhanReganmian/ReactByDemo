@@ -10,6 +10,7 @@ import { Breadcrumb, Spin } from 'antd';
 
 const { getMenuList } = fetch;
 
+// 加载中转个圈
 function Loading() {
   return (
     <div style={{ width: '100%', height: 500, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

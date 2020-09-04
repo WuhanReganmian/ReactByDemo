@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 const { SubMenu } = Menu;
 
 function AsideMenu(props) {
-  const [menuData, setMenuData] = useState([]);
+  const [menuData, setMenuData] = useState([]); // 左侧菜单可显示数据
   const [title, setTitle] = useState([]);
   const [rootSubmenuKeys, setRootSubmenuKeys] = useState([]);
   const [openKey, setOpenKey] = useState([]);
   const [defaultKey, setDefaultKey] = useState([]);
-  const [routeData, setrouteData] = useState([]); // 储存可能跳转的菜单
+  const [routeData, setrouteData] = useState([]); // 储存所有的菜单
   let history = useHistory();
 
   useLayoutEffect(_ => {
@@ -23,10 +23,10 @@ function AsideMenu(props) {
     const roudata = [];
     menuChild.forEach(ele => {
       if(ele.children?.length) {
-        ele.children = ele.children.filter(item => item.isShow === 1);
         roudata.push(...ele.children);
+        ele.children = ele.children.filter(item => item.isShow === 1);
       }
-      !ele.children.length && roudata.push(ele);
+      roudata.push(ele);
     });
     setrouteData(roudata)
     setMenuData(menuChild)
@@ -35,7 +35,8 @@ function AsideMenu(props) {
 
   useEffect(_ => { // 第一次进来默认选中
     const defaultCheck = routeData.find(item => item.menuUrl === history.location.pathname);
-    let defaultKeys = defaultCheck ? [ defaultCheck.menuId.toString() ] : []
+    if(!defaultCheck) return
+    let defaultKeys = defaultCheck.level > 2 ? [ defaultCheck.parentId.toString() ] : [ defaultCheck.menuId.toString() ]
     setDefaultKey(defaultKeys)
   }, [routeData, history.location.pathname])
 
@@ -65,7 +66,7 @@ function AsideMenu(props) {
         style={{ width: '100%' }}>
         {
           menuData.map(item => {
-            if(item.children && item.children.length) {
+            if(item?.children?.length) {
               return (
                 <SubMenu key={item.menuId} title={item.menuName}>
                   {
