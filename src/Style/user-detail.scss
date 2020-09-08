@@ -1,0 +1,42 @@
+.user-detail {
+  header {
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    .left {
+      font-weight: 700;
+    }
+  }
+  .detailPulic {
+    padding: 20px;
+    border-bottom: 10px solid #f0f2f5;
+  }
+  .basics {
+    width: 100%;
+    display: flex;
+    color: #303133;
+    margin-bottom: 30px;
+    &-left {
+      width: 65%;
+      .el-form-item {
+        display: inline-block;
+        width: 50%;
+      }
+    }
+    &-right {
+      width: 35%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 120px;
+        height: 120px;
+        border-radius: 4px;
+        box-shadow: 3px 3px 1px rgba(0, 0, 0, .2);
+      }
+    }
+  }
+  .ecu-detail {
+  
+  }
+}

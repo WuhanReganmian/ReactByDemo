@@ -129,12 +129,14 @@ function HeadEditModal(props) {
     }  
   );
   useEffect(_ => { // mounted
-    async function getModal() {
-      await getDomainRun();
-      getFieldRun();
+    if(props.visible) {
+      async function getModal() {
+        await getDomainRun();
+        getFieldRun();
+      }
+      getModal()
     }
-    getModal()
-  }, [props.userGroupId, getDomainRun, getFieldRun])
+  }, [props.userGroupId, getDomainRun, getFieldRun, props.visible])
 
   const handleOk = _ => {
     setConfirmLoading(true);
@@ -403,9 +405,8 @@ function UserContent(props) {
         pagination={pagination}
         total={total}
         openModal={_ => openModal(true)}/>
-      {
-        visible && <HeadEditModal userGroupId={props.groupId} visible={visible} closed={type => openModal(false, type)} />
-      }
+
+      <HeadEditModal userGroupId={props.groupId} visible={visible} closed={type => openModal(false, type)} />
     </div>
   )
 }

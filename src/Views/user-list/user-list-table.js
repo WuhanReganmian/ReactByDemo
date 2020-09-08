@@ -201,7 +201,7 @@ function UserListTable(props) {
         <Column
           title={lastTitle}
           render={row => (
-            <Link to={`/user-list/user-detail?ecuId=${row.id}`}>查看</Link>
+            <Link to={`/user-list/user-detail/${row.id}`}>查看</Link>
           )} />
       </Table>
       <Pagination

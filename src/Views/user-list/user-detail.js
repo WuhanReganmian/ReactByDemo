@@ -1,4 +1,7 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react';
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import EcuDetail from './user-detail-ecu';
+import '@/Style/user-detail.scss';
 
 const bread = [
   {
@@ -11,10 +14,17 @@ const bread = [
 ]
 
 function UserDetail(props) {
+  const params = useParams();
+
   useLayoutEffect(_ => {
     props.bread(bread);
   }, [props])
-  return <div>1</div>
+
+  return (
+    <div className="user-detail">
+      <EcuDetail ecuId={params.ecuId} />
+    </div>
+  )
 }
 
 export default UserDetail;

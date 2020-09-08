@@ -150,6 +150,7 @@ function UserGroup(props) { // 分组
         cancelText="取消"
         width="700px"
         destroyOnClose
+        zIndex={1100}
         onOk={handleGroupOk}
         confirmLoading={groupLoading}
         onCancel={handleGroupCancel}

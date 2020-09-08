@@ -7,7 +7,7 @@ const UserDetail = lazy(_ => import('@/Views/user-list/user-detail.js'));
 const routes = [
   { path: '/user-list/user-list', component: UserList },
   { path: '/user-list/freezing-member-list', component: FreezingMemberList },
-  { path: '/user-list/user-detail', component: UserDetail },
+  { path: '/user-list/user-detail/:ecuId', component: UserDetail },
 ]
 
 export default routes;
