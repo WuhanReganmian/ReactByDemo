@@ -6,6 +6,7 @@ let api = {
   getMenuList: '/login-user-menu', // 头部菜单
 }
 let api1 = {
+  /* 用户列表 */
   queryGroupList: {
     url: '/query-user-group-list', // 查询该企业下所有用户组
     method: 'post'
@@ -68,6 +69,12 @@ let api1 = {
   toChangeUserFields: {
     url: '/save-user-list-field', // 保存用户列表自定义字段
     method: 'post'
+  },
+  /* 用户详情 */
+  getEcuUserDetail: {
+    url: '/select-ECU-detail', // 获取ECU详情
+    method: 'post',
+    useFormData: true
   },
 }
 

@@ -1,5 +1,6 @@
 let baseUrl = window.location.origin;
-if(baseUrl.indexOf('localhost') > -1 || baseUrl.indexOf('192.168') > -1) baseUrl = 'https://four.gicdev.com';
+// 本地/局域网/自己服务器
+if(baseUrl.indexOf('localhost') > -1 || baseUrl.indexOf('192.168') > -1 || baseUrl.indexOf('47.98') > -1) baseUrl = 'https://four.gicdev.com';
 
 export const baseURL = baseUrl;
 // 请求成功的code

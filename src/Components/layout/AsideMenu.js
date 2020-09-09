@@ -34,7 +34,7 @@ function AsideMenu(props) {
   }, [props.menu, props.menuCheck])
 
   useEffect(_ => { // 第一次进来默认选中
-    const defaultCheck = routeData.find(item => item.menuUrl === history.location.pathname);
+    const defaultCheck = routeData.find(item => history.location.pathname.includes(item.menuUrl));
     if(!defaultCheck) return
     let defaultKeys = defaultCheck.level > 2 ? [ defaultCheck.parentId.toString() ] : [ defaultCheck.menuId.toString() ]
     setDefaultKey(defaultKeys)

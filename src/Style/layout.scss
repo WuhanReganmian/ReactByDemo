@@ -43,6 +43,7 @@
 .headClass {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 50px;
   padding-left: 15px;
   color: hsla(0,0%,100%,.6);
@@ -51,6 +52,10 @@
     width: 32px;
     height: 32px;
     margin-right: 15px;
+  }
+  .headOption {
+    display: flex;
+    align-items: center;
   }
   .menuItem {
     height: 50px;

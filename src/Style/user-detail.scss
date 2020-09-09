@@ -18,9 +18,12 @@
     margin-bottom: 30px;
     &-left {
       width: 65%;
-      .el-form-item {
-        display: inline-block;
+      display: flex;
+      .ant-form {
         width: 50%;
+      }
+      .ant-form-item-label > label::after {
+        margin-right: 18px;
       }
     }
     &-right {
@@ -36,7 +39,15 @@
       }
     }
   }
-  .ecu-detail {
-  
+  .table {
+    width: 100%;
   }
+  .ecu-detail {
+    
+  }
+}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

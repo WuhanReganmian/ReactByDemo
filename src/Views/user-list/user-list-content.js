@@ -95,8 +95,8 @@ function HeadEditModal(props) {
     }
   })
   const {run: getFieldRun} = useRequest(_ => { // 接口：获取表头的数据
-    if(!props.userGroupId) return Promise.reject()
-    return getAllFieldsList({userGroupId: props.userGroupId})
+    if(!props.userGroupId) return Promise.reject();
+    return getAllFieldsList({userGroupId: props.userGroupId});
   }, {
     // refreshDeps: [props.userGroupId],
     onSuccess: res => {

@@ -63,9 +63,7 @@ function UserPopover(props) {
   const { run: getInfoRun } = useRequest(getUserInfo, { // 获取信息
     manual: true,
     onSuccess: res => {
-      const { result = {} } = res || {};
-      result.headUrl = result.headUrl || defaultImg;
-      setInfoData(result);
+      setInfoData(res?.result || {});
     }
   })
 
@@ -73,7 +71,7 @@ function UserPopover(props) {
     return (
       <>
         <div className="popoverEcuStyle">
-          <img src={infoData.headUrl} className="popImg" alt="" />
+          <img src={infoData?.headUrl || defaultImg} className="popImg" alt="" />
           <div className="infoDetail">
             <div className="firstRow">
               <span>{ infoData.name || '--' }</span>
@@ -128,7 +126,7 @@ function UserPopover(props) {
       destroyTooltipOnHide
       overlayStyle={{width: 250}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
-        <img src={props.propData.headUrl_n} className="popImg1" alt="" />
+        <img src={props.propData?.headUrl_n || defaultImg} className="popImg1" alt="" />
         <span className="showEllipsis" style={{color: '#606266', flex: 1}}>{ filterData(props.type.name, props.propData) }</span>
       </div>
     </Popover>
@@ -137,10 +135,7 @@ function UserPopover(props) {
 // 判断表格内容
 function DataDealing(props) {
   let type = props.type;
-  let row = {
-    ...props.row,
-    headUrl_n: props.row.headUrl_n || defaultImg
-  };
+  let row = props.row;
   if(!type.popout && !type.mergeShowPropName && !type.copy) {
     return <div style={{ whiteSpace: 'pre-line' }}>{ filterData(type.name, row) }</div>
   } else if(!type.popout && !type.mergeShowPropName && type.copy) {
