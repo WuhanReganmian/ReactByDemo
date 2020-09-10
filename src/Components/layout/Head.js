@@ -53,7 +53,7 @@ function Head(props) {
   return (
     <div className="headClass">
       <div className="headOption">
-        <img src="assets/menu-logo-2.png" alt="" />
+        <img src={process.env.PUBLIC_URL + '/assets/menu-logo-2.png'} alt="" />
         {
           (props.menu || []).map((item, index) => {
             return (
@@ -70,7 +70,7 @@ function Head(props) {
           })
         }
       </div>
-      <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}>源码</Button>
+      <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}></Button>
     </div>
   )
 }
