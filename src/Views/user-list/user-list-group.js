@@ -149,8 +149,6 @@ function UserGroup(props) { // 分组
         okText={groupId ? '保存' : '确认新建'}
         cancelText="取消"
         width="700px"
-        destroyOnClose
-        zIndex={1100}
         onOk={handleGroupOk}
         confirmLoading={groupLoading}
         onCancel={handleGroupCancel}
@@ -182,6 +180,7 @@ function UserGroup(props) { // 分组
         title="分组管理"
         visible={groupConfig}
         footer={null}
+        zIndex={999}
         onCancel={handleConfigCancel}>
         <div className="groupConfig">
           {

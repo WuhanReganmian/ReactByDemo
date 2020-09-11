@@ -70,7 +70,7 @@ function Head(props) {
           })
         }
       </div>
-      <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}></Button>
+      <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}>0.0</Button>
     </div>
   )
 }
