@@ -74,10 +74,7 @@ function HeadEditModal(props) {
           state[domainIndex].propNames = propNames;
           return [...state];
         case 'delete':
-          let arr = [];
-          state.forEach((item, sIndex) => {
-            sIndex !== value && arr.push(item)
-          })
+          let arr = state.filter((_, sIndex) => sIndex !== value);
           disableDomainList(arr)
           return [...arr];
         case 'push':
@@ -328,6 +325,7 @@ function UserContent(props) {
   const [total, setTotal] = useState(0);
   const [visible, setVisible] = useState(false);
   const { run: getHeadRun } = useRequest(_ => { // 接口：获取头数据
+    if(!props.groupId) return Promise.reject();
     return getHeadFieldsList({ userGroupId: props.groupId })
   }, {
     refreshDeps: [props.groupId],

@@ -63,7 +63,8 @@ axios.interceptors.response.use(function (response) {
     let data = response.data;
     const { code, message: msg } = data;
     if(code === notAuthCode) {
-      window.location.href = `${window.location.origin}/#/login`;
+      const { origin, pathname } = window.location;
+      window.location.href = `${origin}${pathname}#/login`;
       return;
     } else if(code !== succCode) {
       message.error(msg)
@@ -72,7 +73,6 @@ axios.interceptors.response.use(function (response) {
     resolve(data);
   })
 }, function (error) {
-  // 对响应错误做点什么
   let res = error.response || {};
   let data = res.data || {};
   message.error(data.message || '网络连接中断');

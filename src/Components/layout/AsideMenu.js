@@ -4,12 +4,32 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const { SubMenu } = Menu;
 
+// const getAllData = arr => { // 递归获取所有路由
+//   return arr.reduce((pre, val) => {
+//     return pre.concat(val, getAllData(val?.children || []))
+//   }, [])
+// }
+
+const getUrl = (arr, path, option = 'menuUrl') => { // 递归找到子路由，并返回最近可显示的父路由
+  for(let key of arr) {
+    if(key[option] && path.includes(key[option].toString())) {
+      return key;
+    }
+    if(key?.children?.length) {
+      let data = getUrl(key.children, path, option);
+      if(data && data.isShow) return data;
+      if(data) return key;
+    }
+  }
+  return undefined;
+}
+
 function AsideMenu(props) {
   const [menuData, setMenuData] = useState([]); // 左侧菜单可显示数据
   const [title, setTitle] = useState([]);
-  const [rootSubmenuKeys, setRootSubmenuKeys] = useState([]);
-  const [openKey, setOpenKey] = useState([]);
-  const [defaultKey, setDefaultKey] = useState([]);
+  const [rootSubmenuKeys, setRootSubmenuKeys] = useState([]); // 可展开菜单
+  const [openKey, setOpenKey] = useState([]); // 组件已展开的菜单
+  const [defaultKey, setDefaultKey] = useState([]); // 选中的菜单
   const [routeData, setrouteData] = useState([]); // 储存所有的菜单
   let history = useHistory();
 
@@ -20,30 +40,37 @@ function AsideMenu(props) {
   
     const rootSubmenuKeys = menuChild.map(item => item.menuId.toString()); // 可展开菜单
   
-    const roudata = [];
-    menuChild.forEach(ele => {
-      if(ele.children?.length) {
-        roudata.push(...ele.children);
-        ele.children = ele.children.filter(item => item.isShow === 1);
-      }
-      roudata.push(ele);
-    });
-    setrouteData(roudata)
+    // const roudata = getAllData(menuChild);
+    setrouteData(menuChild)
+    menuChild = menuChild.map(item => ({ // 过滤应该显示的菜单
+      ...item,
+      children: item.children.filter(i => i.isShow)
+    }))
+    console.log(menuChild)
     setMenuData(menuChild)
     setRootSubmenuKeys(rootSubmenuKeys)
   }, [props.menu, props.menuCheck])
-
-  useEffect(_ => { // 第一次进来默认选中
-    const defaultCheck = routeData.find(item => history.location.pathname.includes(item.menuUrl));
-    if(!defaultCheck) return
-    let defaultKeys = defaultCheck.level > 2 ? [ defaultCheck.parentId.toString() ] : [ defaultCheck.menuId.toString() ]
-    setDefaultKey(defaultKeys)
-  }, [routeData, history.location.pathname])
+  
+  useEffect(_ => { // 默认选中
+    const check = getUrl(routeData, history.location.pathname);
+    if(!check) return;
+    setDefaultKey([ check?.menuId.toString() ]);
+    if(!openKey?.length && check.level > 2 && check.isShow) {
+      // 第一次进来或者刷新，如果是子菜单则展开
+      setOpenKey([ check.parentId.toString() ]);
+    }
+    // 不依赖openkey
+    // eslint-disable-next-line
+  }, [routeData, history.location.pathname]);
 
   const onClick = useCallback(({ key }) => {
-    const link = routeData.find(item => item.menuId.toString() === key);
-    link && history.push(link.menuUrl);
-  }, [routeData, history]);
+    const link = getUrl(menuData, key.toString(), 'menuId')
+    if(link && !history.location.pathname.includes(link.menuUrl)) { // 防止重复点击
+      history.push(link.menuUrl);
+      link?.level < 3 && setOpenKey([])
+    }
+    // eslint-disable-next-line
+  }, [routeData]);
 
   const onOpenChange = openKeys => { // 点击菜单，收起其他展开的所有菜单
     const latestOpenKey = openKeys.find(key => openKey.indexOf(key) === -1);

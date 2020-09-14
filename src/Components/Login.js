@@ -36,12 +36,12 @@ function Login() {
     <div className='loginBox'>
       <header className='loginHeader'>
         <div className="headerContent">
-          <img src='assets/logo-login.png' alt='demo' />
+          <img src={process.env.PUBLIC_URL + '/assets/logo-login.png'} alt='demo' />
         </div>
       </header>
 
       <div className='loginBody'>
-        <div className="loginBodyContent" style={{ backgroundImage: 'url(assets/login-bg.png)' }}>
+        <div className="loginBodyContent" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/login-bg.png)` }}>
           <div className='loginInput'>
             <p>GIC商户后台登录</p>
             <Form
