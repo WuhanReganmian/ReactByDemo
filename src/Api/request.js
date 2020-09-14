@@ -21,31 +21,31 @@ export const AXIOS_METHOD_TYPET = {
  * @return function 返回axios实例
 */
 const request = (api, params = {}, isFormdata = false,  method = AXIOS_METHOD_TYPET.GET, config = {}) => {
-    method = method.toLocaleUpperCase();
-    // get请求放在params中，其他请求放在body
-    const data = method === 'GET' ? 'params' : 'data';
-    // formdata转换
-    if(isFormdata) params = qs.stringify(params);
-    // 这部分也可以放到defaults中去设置
-    let headers = {
-        // 'X-Requested-With': 'XMLHttpRequest',
-        // 'Content-Type': 'application/json'
-        isControl: true
+  method = method.toLocaleUpperCase();
+  // get请求放在params中，其他请求放在body
+  const data = method === 'GET' ? 'params' : 'data';
+  // formdata转换
+  if(isFormdata) params = qs.stringify(params);
+  // 这部分也可以放到defaults中去设置
+  let headers = {
+    // 'X-Requested-With': 'XMLHttpRequest',
+    // 'Content-Type': 'application/json'
+    isControl: true
+  };
+  if (config.headers) {
+    headers = {
+      ...headers,
+      ...config.headers
     };
-    if (config.headers) {
-        headers = {
-          ...headers,
-          ...config.headers
-        };
-    }
-    return axios({
-        baseURL,
-        url: api,
-        method,
-        [data]: params,
-        headers,
-        withCredentials: true,
-    });
+  }
+  return axios({
+    baseURL,
+    url: api,
+    method,
+    [data]: params,
+    headers,
+    withCredentials: true,
+  });
 };
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

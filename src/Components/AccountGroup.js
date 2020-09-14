@@ -8,7 +8,7 @@ const { Option } = Select;
 
 function GroupAccount(props) {
   const [accountList, setAccountList] = useState([]);
-  const [showOptions, setShowOptions] = useState(false);
+  const [showOptions, setShowOptions] = useState(1);
 
   useEffect(_ => {
     getAdminGroupList().then(res => {
@@ -16,12 +16,14 @@ function GroupAccount(props) {
       let options = result.map(item => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>)
       setAccountList(options);
     })
-    let bool = props.accountVal.getFieldValue('account') === 2 ? true : false;
-    setShowOptions(bool)
+  }, [])
+
+  useEffect(_ => {
+    setShowOptions(props.accountVal)
   }, [props.accountVal])
 
   const radioChange = e => {
-    setShowOptions(e.target.value === 2 ? true : false)
+    setShowOptions(e.target.value)
   }
 
   return (
@@ -36,7 +38,7 @@ function GroupAccount(props) {
           <Radio value={3}>仅自己</Radio>
         </Radio.Group>
       </Form.Item>
-      {showOptions &&
+      {showOptions === 2 &&
         <Form.Item
           name="groupChoose"
           label=" "

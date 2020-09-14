@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect, useReducer } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useReducer, useMemo } from 'react';
 import { Input, Select, Modal, Alert, Button, message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import fetch from '@/Api';
@@ -13,9 +13,7 @@ const { Option, OptGroup } = Select;
 function HeadEditModal(props) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const domainList = useRef(''); // 接口获取的域列表
-  const [domainOptions, setDomainOptions] = useState([]); // 过滤后的域选项
   const [userListFieldId, setUserListFieldId] = useState(''); // 字段id
-  const fieldsNum = useRef(0); // 已选数量
 
   const [userFields, setUserFields] = useReducer( // 基础字段值
     (state, action) => {
@@ -33,8 +31,48 @@ function HeadEditModal(props) {
     , []
   );
 
-  const disableDomainList = useCallback(array => { // 过滤域选项disabled
-    let selected = array.map(item => item.areaId);
+  const [domainFields, setDomainFields] = useReducer( // 域字段值
+    (state, action) => {
+      const { type, value } = action;
+      switch (type) {
+        case 'assign':
+          return value;
+        case 'update':
+          const { index, i, bool } = value;
+          state[index].propNames[i].checked = !bool;
+          return [...state];
+        case 'changeDomain':
+          const { propNames, areaId, domainIndex } = value;
+          state[domainIndex].areaId = areaId;
+          state[domainIndex].propNames = propNames;
+          return [...state];
+        case 'delete':
+          let arr = state.filter((_, sIndex) => sIndex !== value);
+          return [...arr];
+        case 'push':
+          return [...state, value];
+        default:
+          throw new Error();
+      }
+    }
+    , []
+  );
+
+  const fieldsNum = useMemo(_ => { // 已选字段数量
+    let count = 0;
+    userFields.forEach(item => {
+      if(item.checked) count++;
+    })
+    domainFields.forEach(item => {
+      item.propNames && item.propNames.forEach(ele => {
+        if(ele.checked) count++;
+      })
+    })
+    return count;
+    }, [domainFields, userFields])
+
+  const domainOptions = useMemo(_ => { // 过滤后的域选项
+    let selected = domainFields.map(item => item.areaId);
     let arr = [
       {
         label: '会员卡',
@@ -56,35 +94,8 @@ function HeadEditModal(props) {
       item.cuType === 2 && arr[2].options.push(item);
       item.cuType === 3 && arr[0].options.push(item);
     })
-    setDomainOptions(arr);
-  }, [])
-  const [domainFields, setDomainFields] = useReducer( // 域字段值
-    (state, action) => {
-      const { type, value } = action;
-      switch (type) {
-        case 'assign':
-          return value;
-        case 'update':
-          const { index, i, bool } = value;
-          state[index].propNames[i].checked = !bool;
-          return [...state];
-        case 'changeDomain':
-          const { propNames, areaId, domainIndex } = value;
-          state[domainIndex].areaId = areaId;
-          state[domainIndex].propNames = propNames;
-          return [...state];
-        case 'delete':
-          let arr = state.filter((_, sIndex) => sIndex !== value);
-          disableDomainList(arr)
-          return [...arr];
-        case 'push':
-          return [...state, value];
-        default:
-          throw new Error();
-      }
-    }
-    , []
-  );
+    return arr;
+  }, [domainFields, domainList])
 
   const {run: getDomainRun} = useRequest(getAllDomainList, { // 接口：获取所有域选项
     onSuccess: res => {
@@ -101,18 +112,6 @@ function HeadEditModal(props) {
       setUserFields({ type: 'assign', value: ecuField || [] });
       setDomainFields({ type: 'assign', value: cuField || [] });
       setUserListFieldId(userListFieldId || '');
-      // 选中的初始值
-      let count = 0;
-      ecuField.forEach(item => {
-        if(item.checked) count++;
-      })
-      cuField.forEach(item => {
-        item.propNames && item.propNames.forEach(ele => {
-          if(ele.checked) count++;
-        })
-      })
-      disableDomainList(cuField || []);
-      fieldsNum.current = count;
     }
   })
   const {run: changeFields} = useRequest(toChangeUserFields, // 接口：保存表头编辑
@@ -125,15 +124,14 @@ function HeadEditModal(props) {
       }
     }  
   );
+  
   useEffect(_ => { // mounted
     if(props.visible) {
-      async function getModal() {
-        await getDomainRun();
-        getFieldRun();
-      }
-      getModal()
+      getDomainRun();
+      getFieldRun();
     }
-  }, [props.userGroupId, getDomainRun, getFieldRun, props.visible])
+    // eslint-disable-next-line
+  }, [props.userGroupId, props.visible])
 
   const handleOk = _ => {
     setConfirmLoading(true);
@@ -208,12 +206,10 @@ function HeadEditModal(props) {
     const handleChange = useCallback((val, index) => {
       let num = 0;
       domainFields[index].propNames.forEach(item => item.checked && num++ );
-      fieldsNum.current -= num;
       let domainData = (domainList.current || []).find(item => item.areaId === val);
       let cuType = domainData.cuType;
       changeDomainFieldsList({cuType}).then(res => {
         setDomainFields({ type: 'changeDomain', value: { areaId: val, propNames: res.result || [], domainIndex: index } });
-        setTimeout(_ =>  disableDomainList(domainFields), 0);
       })
     }, [])
 
@@ -255,21 +251,18 @@ function HeadEditModal(props) {
   }
 
   const changeUserFieldCheck = useCallback((check, i) => { // 改变普通字段状态
-    if(!check && fieldsNum.current >= 8) return message.warning('最多勾选 8 个选项');
-    check ? fieldsNum.current-- : fieldsNum.current++;
+    if(!check && fieldsNum >= 8) return message.warning('最多勾选 8 个选项');
     setUserFields({ type: 'update', i, check });
+    // eslint-disable-next-line
   }, [])
   const changeDomainField = useCallback((bool, index, i) => { // 改变域字段状态
-    if(!bool && fieldsNum.current >= 8) return message.warning('最多勾选 8 个选项');
-    bool ? fieldsNum.current-- : fieldsNum.current++;
+    if(!bool && fieldsNum >= 8) return message.warning('最多勾选 8 个选项');
     setDomainFields({ type: 'update', value: { index, i, bool } });
+    // eslint-disable-next-line
   }, [])
   const deleteDomain = useCallback(index => { // 删除域
-    let i = 0;
-    domainFields[index].propNames.forEach(item => { if(item.checked) i++ });
-    fieldsNum.current -= i;
     setDomainFields({ type: 'delete', value: index })
-  }, [domainFields])
+  }, [])
   const addDomainFieldsOptions = _ => { // 添加一个域
     setDomainFields({ type: 'push', value: { areaId: '', propNames: [] } })
     setTimeout(_ => {
@@ -289,7 +282,7 @@ function HeadEditModal(props) {
       confirmLoading={confirmLoading}
       onCancel={handleCancel}
       destroyOnClose>
-      <Alert showIcon message={<span>请选择您想显示的列表详细信息，最多勾选 8 个选项，还可以勾选 <span style={{ color: '#2f54ed' }}>{8 - fieldsNum.current}</span> 个</span>} type="info" />
+      <Alert showIcon message={<span>请选择您想显示的列表详细信息，最多勾选 8 个选项，还可以勾选 <span style={{ color: '#2f54ed' }}>{8 - fieldsNum}</span> 个</span>} type="info" />
       <div className="maxBox">
         <p>用户字段</p>
         <div className="upBox">

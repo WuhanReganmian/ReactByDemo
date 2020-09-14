@@ -35,7 +35,8 @@ function Head(props) {
     } else if(data.children?.length) {
       history.push(data.children[0].menuUrl);
     }
-  }, [history, props])
+    // eslint-disable-next-line
+  }, [])
 
   const onClickMenu = useCallback(item => { // 菜单跳转
     const { menuUrl, children, menuId } = item;
@@ -45,7 +46,8 @@ function Head(props) {
     } else if(children?.length) {
       history.push(children[0].menuUrl);
     }
-  }, [history, props])
+    // eslint-disable-next-line
+  }, [])
   const toGithub = _ => {
     window.open('https://github.com/WuhanReganmian/ReactByDemo');
   };

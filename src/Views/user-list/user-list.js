@@ -9,9 +9,9 @@ const bread = [
   }
 ]
 
-
 function UserList(props) {
   const [userGroupId, setUserGroupId] = useState('')
+
   useLayoutEffect(_ => {
     props.bread(bread);
   }, [props])

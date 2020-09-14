@@ -46,7 +46,6 @@ function AsideMenu(props) {
       ...item,
       children: item.children.filter(i => i.isShow)
     }))
-    console.log(menuChild)
     setMenuData(menuChild)
     setRootSubmenuKeys(rootSubmenuKeys)
   }, [props.menu, props.menuCheck])

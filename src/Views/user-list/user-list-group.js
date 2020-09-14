@@ -149,6 +149,7 @@ function UserGroup(props) { // 分组
         okText={groupId ? '保存' : '确认新建'}
         cancelText="取消"
         width="700px"
+        getContainer={false}
         onOk={handleGroupOk}
         confirmLoading={groupLoading}
         onCancel={handleGroupCancel}
@@ -171,7 +172,7 @@ function UserGroup(props) { // 分组
             label="人群筛选">
             <Input />
           </Form.Item>
-          <GroupAccount accountVal={groupForm} />
+          <GroupAccount accountVal={groupForm.getFieldValue('account')} />
         </Form>
         {groupForm.title}
       </Modal>
