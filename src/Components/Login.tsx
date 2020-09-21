@@ -1,10 +1,10 @@
 import React from "react";
 import { Form, Input, Button, Select, Row, Col, message } from "antd";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useRequest } from '@umijs/hooks';
-import '@/Style/login.scss';
-import fetch from "@/Api";
+import { useHistory } from "react-router-dom";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { useRequest } from "@umijs/hooks";
+import "src/Style/login.scss";
+import fetch from "src/Api";
 
 const { login: loginIn, getEnterprise } = fetch;
 const { Option } = Select;
@@ -14,22 +14,22 @@ function Login() {
   const { run: getEnterRun } = useRequest(getEnterprise, { manual: true });
   const history = useHistory();
 
-  const onFinish = async values => { // 登录
+  const onFinish = async (values: any) => { // 登录
     const { nationCode, password, username } = values;
     let enterpriseId;
     await getEnterRun({ phoneNumber: username }).then(res => { // 根据用户名搜索企业
       enterpriseId = res.result?.[0]?.enterpriseId;
-    })
+    });
     let params = {
       phoneNumber: username,
       password,
       nationCode,
       enterpriseId
-    }
+    };
     loginRequest(params).then(_ => {
       message.success('登录成功');
       history.push('/user-list/user-list');
-    })
+    });
   };
 
   return (
@@ -84,7 +84,7 @@ function Login() {
       </div>
       <footer>Copyright 2019 Demogic.com All Rights Reserved 浙ICP备15033117号-1</footer>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

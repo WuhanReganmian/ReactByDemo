@@ -34,11 +34,14 @@
     │
     ├─Style
     │
+    ├─Types // 声明文件
+    │
     └─Views // 页面
 ```
 
 ## 技术栈
   - React 16.13.1
+  - typescript 4.0.2
   - Ant-design 4.4.1
   - Umi hooks
   - Axios

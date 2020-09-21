@@ -193,10 +193,10 @@
   }
 }
 // 表头边框
-.ant-table-container table > thead > tr:first-child th {
+.user-list-table .ant-table-container table > thead > tr:first-child th {
   border-right: 1px solid #dcdfe6;
 }
-.ant-table-container table > thead > tr:last-child th {
+.user-list-table .ant-table-container table > thead > tr:last-child th {
   border-right: 1px solid #dcdfe6;
   border-top: 1px solid #dcdfe6;
 }

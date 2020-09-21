@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Radio, Select } from 'antd';
-import fetch from '@/Api';
-import '@/Style/components.scss';
+import fetch from 'src/Api';
+import 'src/Style/components.scss';
 
 const { getAdminGroupList } = fetch;
 const { Option } = Select;
 
-function GroupAccount(props) {
+interface GroupAccountType {
+  accountVal: number;
+}
+
+function GroupAccount(props: GroupAccountType) {
   const [accountList, setAccountList] = useState([]);
   const [showOptions, setShowOptions] = useState(1);
 
-  useEffect(_ => {
-    getAdminGroupList().then(res => {
+  useEffect(() => {
+    getAdminGroupList().then((res: ApiRes) => {
       let { result } = res.result || [];
-      let options = result.map(item => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>)
+      let options = result.map((item: any) => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>);
       setAccountList(options);
-    })
-  }, [])
+    });
+  }, []);
 
-  useEffect(_ => {
-    setShowOptions(props.accountVal)
-  }, [props.accountVal])
+  useEffect(() => {
+    setShowOptions(props.accountVal);
+  }, [props.accountVal]);
 
-  const radioChange = e => {
-    setShowOptions(e.target.value)
-  }
+  const radioChange = (e: any) => {
+    setShowOptions(e.target.value);
+  };
 
   return (
     <>
@@ -53,7 +57,7 @@ function GroupAccount(props) {
           </Select>
         </Form.Item>}
     </>
-  )
+  );
 }
 
 export default GroupAccount;

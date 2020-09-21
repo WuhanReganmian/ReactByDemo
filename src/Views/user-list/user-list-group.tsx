@@ -1,31 +1,40 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Space, Modal, Form, Input, message } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import GroupAccount from '@/Components/AccountGroup';
+import GroupAccount from 'src/Components/AccountGroup';
 import { useRequest } from '@umijs/hooks';
-import fetch from '@/Api';
+import fetch from 'src/Api';
 
 const { queryGroupList, addGroupList, checkGroupLimit, delGroupList, getGroupDetail, saveGroupList } = fetch;
 const { confirm } = Modal;
 
-function UserGroup(props) { // 分组
-  const [groupList, setGroupList] = useState([]);
-  const [groupCheck, setGroupCheck] = useState('');
-  const [groupVisible, setGroupVisible] = useState(false);
-  const [groupConfig, setGroupConfig] = useState(false);
-  const [groupLoading, setGroupLoading] = useState(false);
-  const [groupId, setGroupId] = useState(0);
+interface GroupP {
+  change(v: string): any;
+}
+
+interface GroupV {
+  userGroupId: string;
+  groupName: string;
+}
+
+function UserGroup(props: GroupP) { // 分组
+  const [groupList, setGroupList] = useState<GroupV[]>([]);
+  const [groupCheck, setGroupCheck] = useState<string>('');
+  const [groupVisible, setGroupVisible] = useState<boolean>(false);
+  const [groupConfig, setGroupConfig] = useState<boolean>(false);
+  const [groupLoading, setGroupLoading] = useState<boolean>(false);
+  const [groupId, setGroupId] = useState<number>(0);
   const [groupForm] = Form.useForm();
 
   const { run: getGroupRun } = useRequest(queryGroupList, { // 获取用户列表
-    onSuccess: res => {
-      let result = res.result || []
+    onSuccess: (res: ApiRes) => {
+      let result = res.result || [];
       setGroupList(result);
-      let userId = result?.[0].userGroupId
+      let userId = result?.[0].userGroupId;
       setGroupCheck(userId);
       props.change(userId);
     }
-   })
+   });
   const { run: newGroup } = useRequest(addGroupList, { // 新建分组接口
     manual: true,
     onSuccess: _ => {
@@ -35,7 +44,7 @@ function UserGroup(props) { // 分组
       setGroupLoading(false);
     },
     onError: _ => setGroupLoading(false)
-  })
+  });
   const { run: saveGroup } = useRequest(saveGroupList, { // 保存分组接口
     manual: true,
     onSuccess: _ => {
@@ -45,18 +54,18 @@ function UserGroup(props) { // 分组
       setGroupLoading(false);
     },
     onError: _ => setGroupLoading(false)
-  })
+  });
 
-  const changeActive = useCallback(id => { // 切换分组
-    setGroupCheck(id)
+  const changeActive = useCallback((id: string) => { // 切换分组
+    setGroupCheck(id);
     props.change(id);
-  }, [props])
+  }, [props]);
 
-  const handleGroupCancel = _ => { // 关闭新建分组
+  const handleGroupCancel = () => { // 关闭新建分组
     setGroupVisible(false);
     setGroupLoading(false);
-  }
-  const handleGroupOk = _ => { // 新建/保存分组
+  };
+  const handleGroupOk = () => { // 新建/保存分组
     groupForm.validateFields().then(values => {
       setGroupLoading(true);
       const { title, people, account, groupChoose } = values;
@@ -66,26 +75,26 @@ function UserGroup(props) { // 分组
         editUserGroupList: groupChoose,
         memberScreenId: people,
         userGroupId: groupId || undefined
-      }
-      if(groupId) {
-        saveGroup(params)
+      };
+      if (groupId) {
+        saveGroup(params);
       } else {
-        newGroup(params)
+        newGroup(params);
       }
-    })
-  }
+    });
+  };
   const openGroupModal = () => { // 打开新建分组弹框
     setGroupId(0);
     setGroupVisible(true);
-  }
-  const groupClosed = _ => { // 关闭重置数据
+  };
+  const groupClosed = () => { // 关闭重置数据
     groupForm.resetFields();
-  }
+  };
 
-  const handleConfigCancel = _ => { // 关闭分组管理
+  const handleConfigCancel = () => { // 关闭分组管理
     setGroupConfig(false);
-  }
-  const { run: openEditGroup } = useRequest(getGroupDetail, { // 编辑打开
+  };
+  const { run: openEditGroup } = useRequest(getGroupDetail, { // 接口：编辑打开
     manual: true,
     onSuccess: (res, params) => {
       const { groupName, editType, editUserGroupList } = res.result || {};
@@ -93,12 +102,12 @@ function UserGroup(props) { // 分组
         title: groupName || '',
         account: editType || 1,
         groupChoose: editUserGroupList || []
-      })
+      });
       openGroupModal();
-      setGroupId(params[0].userGroupId)
+      setGroupId(params[0].userGroupId);
     }
-  })
-  const delGroup = useCallback(userGroupId => { // 删除分组
+  });
+  const delGroup = useCallback((userGroupId: string) => { // 删除分组
     confirm({
       title: '提示',
       icon: <ExclamationCircleOutlined />,
@@ -106,20 +115,21 @@ function UserGroup(props) { // 分组
       okText: '确认删除',
       cancelText: '取消',
       onOk() {
-        return delGroupList({ userGroupId }).then(res => {
+        return delGroupList({ userGroupId }).then(() => {
           getGroupRun();
           message.success('删除成功');
-        })
-      },
+        });
+      }
     });
-  }, [getGroupRun])
-  const checkLimit = useCallback((userGroupId, type) => { // 检查操作权限
-    checkGroupLimit({ userGroupId }).then(res => {
-      if(!res.result) return message.warning('您没有权限操作');
+  }, [getGroupRun]);
+  const checkLimit = useCallback((userGroupId: string, type: number) => { // 检查操作权限
+    checkGroupLimit({ userGroupId }).then((res: ApiRes) => {
+      if (!res.result) return message.warning('您没有权限操作');
       type === 2 && delGroup(userGroupId);
       type === 1 && openEditGroup({userGroupId})
-    })
-  }, [delGroup, openEditGroup])
+    });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="userGroup">
@@ -134,7 +144,7 @@ function UserGroup(props) { // 分组
                 onClick={_ => changeActive(item.userGroupId)}>
                 { item.groupName }
               </span>
-            )
+            );
           })
         }
       </Space>
@@ -164,7 +174,7 @@ function UserGroup(props) { // 分组
             name="title"
             label="分组名称"
             rules={ [ {required: true, message: '请输入分组名称'} ] }>
-            <Input placeholder="请输入分组名称" maxLength="10" style={{width: 440}} autoComplete="off" />
+            <Input placeholder="请输入分组名称" maxLength={10} style={{width: 440}} autoComplete="off" />
           </Form.Item>
           <Form.Item
             name="people"
@@ -174,7 +184,6 @@ function UserGroup(props) { // 分组
           </Form.Item>
           <GroupAccount accountVal={groupForm.getFieldValue('account')} />
         </Form>
-        {groupForm.title}
       </Modal>
 
       <Modal
@@ -194,14 +203,14 @@ function UserGroup(props) { // 分组
                     <Button type="text" onClick={_ => checkLimit(item.userGroupId, 2)}>删除</Button>
                   </span>
                 </div>
-              )
+              );
             })
           }
         </div>
         <div className="addBtn" onClick={openGroupModal}>+ 添加分组</div>
       </Modal>
     </div>
-  )
+  );
 }
 
 export default UserGroup;

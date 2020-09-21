@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const blankClass = {
   display: 'flex',
@@ -8,12 +8,12 @@ const blankClass = {
   height: '100vh',
   fontSize: 18,
   backgroundColor: '#eee'
-}
+};
 
 function Blank() {
   return (
     <div style={blankClass}>您访问的页面被外星人带走啦...</div>
-  )
+  );
 }
 
 export default Blank;

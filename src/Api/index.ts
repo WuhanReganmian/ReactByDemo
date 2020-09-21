@@ -1,10 +1,10 @@
-import getFetch from './getFetch.js';
+import getFetch from './getFetch';
 
 let api = {
   login: '/login', // 登录
   getEnterprise: '/list-enterprise-by-phone', // 根据电话号码查商户
-  getMenuList: '/login-user-menu', // 头部菜单
-}
+  getMenuList: '/login-user-menu' // 头部菜单
+};
 let api1 = {
   /* 用户列表 */
   queryGroupList: {
@@ -75,13 +75,13 @@ let api1 = {
     url: '/select-ECU-detail', // 获取ECU详情
     method: 'post',
     useFormData: true
-  },
-}
+  }
+};
 
-api = getFetch(api, '/gic-auth-web');
-api1 = getFetch(api1, '/member-config');
+let doApi = getFetch(api, '/gic-auth-web');
+let doApi1 = getFetch(api1, '/member-config');
 
 export default {
-  ...api,
-  ...api1
-}
+  ...doApi,
+  ...doApi1
+};

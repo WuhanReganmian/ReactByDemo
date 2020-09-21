@@ -1,50 +1,64 @@
 import React, { useState } from 'react';
 import { useRequest } from '@umijs/hooks';
 import { Form, Radio, Table, Tooltip } from 'antd';
-import fetch from '@/Api';
-import defaultImg from '@/Images/member_img.png';
+import fetch from 'src/Api';
+import defaultImg from 'src/Images/member_img.png';
 
 const { getEcuUserDetail } = fetch;
 
-function EcuDetail(props) {
-  const [baseInfo, setBaseInfo] = useState({})
-  const [tabChoose, setTabChoose] = useState('1')
-  const [tableData, setTableData] = useState([])
+interface EcuP {
+  ecuId: string;
+}
+
+interface BaseInfoV {
+  name?: string;
+  sex?: string;
+  birthday?: string;
+  nickName?: string;
+  age?: string;
+  city?: string;
+  imgUrl?: string;
+}
+
+function EcuDetail(props: EcuP) {
+  const [baseInfo, setBaseInfo] = useState<BaseInfoV>({});
+  const [tabChoose, setTabChoose] = useState<string>('1');
+  const [tableData, setTableData] = useState([]);
   // const [assistStore, setAssistStore] = useState('')
   // const [defaultFields, setDefaultFields] = useState({})
   // const [userFields, setUserFields] = useState({})
 
   // eslint-disable-next-line
   const { run: getListRun } = useRequest(_ => {
-    if(!props.ecuId) return Promise.reject();
-    return getEcuUserDetail({ ecuId: props.ecuId })
+    if (!props.ecuId) return Promise.reject();
+    return getEcuUserDetail({ ecuId: props.ecuId });
   }, {
     onSuccess: res => {
-      let result = res?.result || {}
+      let result = res?.result || {};
       setBaseInfo(result);
       // eslint-disable-next-line
       const { master, system, custom } = result;
       const { list = [], assistStore = '' } = master;
-      let arr = (list || []).map((item, i) => { // 合并表格
+      let arr = (list || []).map((item: any, i: number) => { // 合并表格
         return {
           ...item,
           key: i,
           assistStore: assistStore || ''
-        }
-      })
-      if(!arr.length && assistStore) {
-        arr.push({ key: '1', assistStore: assistStore })
+        };
+      });
+      if (!arr.length && assistStore) {
+        arr.push({ key: '1', assistStore });
       }
       setTableData(arr);
       // setAssistStore(master?.assistStore || '');
       // defaultFields = system || [];
       // userFields = custom || [];
     }
-  })
+  });
 
-  const radioChange = e => { // tab栏切换
+  const radioChange = (e: any) => { // tab栏切换
     setTabChoose(e.target.value || '1');
-  }
+  };
   const columns = [ // 表格
     {
       title: '品牌',
@@ -65,19 +79,19 @@ function EcuDetail(props) {
       title: '协管门店',
       dataIndex: 'assistStore',
       key: 'assistStore',
-      render: (text, row, index) => {
+      render: (text: string, row: any, index: number) => {
         return {
           children: (
             <Tooltip title={text} placement="top">
               <div className="ellipsis">{text}</div>
             </Tooltip>
           ),
-          props: { rowSpan: tableData.length },
+          props: { rowSpan: tableData.length }
         };
       }
     }
   ];
-  
+
   return (
     <div className="ecu-detail detailPulic">
       <header>用户信息</header>
@@ -107,7 +121,7 @@ function EcuDetail(props) {
         { tabChoose === '1' && <Table dataSource={tableData} columns={columns} pagination={false} /> }
       </div>
     </div>
-  )
+  );
 }
 
 export default EcuDetail;

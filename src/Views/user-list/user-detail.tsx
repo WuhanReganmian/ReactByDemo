@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
-import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { useParams } from 'react-router-dom';
 import EcuDetail from './user-detail-ecu';
-import '@/Style/user-detail.scss';
+import 'src/Style/user-detail.scss';
 
 const bread = [
   {
@@ -11,20 +11,20 @@ const bread = [
   {
     name: '用户详情'
   }
-]
+];
 
-function UserDetail(props) {
-  const params = useParams();
+function UserDetail(props: P) {
+  const params = useParams<any>();
 
-  useLayoutEffect(_ => {
+  useLayoutEffect(() => {
     props.bread(bread);
-  }, [props])
+  }, [props]);
 
   return (
     <div className="user-detail">
       <EcuDetail ecuId={params.ecuId} />
     </div>
-  )
+  );
 }
 
 export default UserDetail;

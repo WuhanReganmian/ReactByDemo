@@ -1,0 +1,22 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint-config-alloy"
+  ],
+  "linterOptions": {
+    "exclude": ["**/node_modules/**", "config-overrides.js"]
+  },
+  "jsRules": {},
+  "rules": {
+    "linebreak-style": false, // 不限制换行符
+    "ordered-imports": false, // import不排序
+    "no-implicit-dependencies": [true, ["src", "qs", "@ant-design/icons"]], // 不检测引入里面的src、qs、ant图标
+    "no-submodule-imports": [true, "src"],
+    "indent": [true, "spaces", 2], // 限制2空格
+    "arrow-parens": [true, "ban-single-arg-parens"], // 单参数不加括号
+    "no-parameter-reassignment": false, // 允许对参数再赋值
+    "quotemark": false, // 不限制引号
+    "no-magic-numbers": false // 可以使用魔法数字
+  },
+  "rulesDirectory": []
+}

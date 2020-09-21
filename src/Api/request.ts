@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { message } from 'antd';
 import qs from 'qs';
-import { baseURL, succCode, notAuthCode} from '@/Config';
+import { baseURL, succCode, notAuthCode } from 'src/Config';
 
 // 请求方法
 export const AXIOS_METHOD_TYPET = {
@@ -11,7 +11,7 @@ export const AXIOS_METHOD_TYPET = {
   DELETE: 'DELETE',
   PATCH: 'PATCH'
 };
-/** 方法说明
+/* 方法说明
  * @method request
  * @param api 请求相对地址
  * @param params 请求参数 默认为空
@@ -19,60 +19,60 @@ export const AXIOS_METHOD_TYPET = {
  * @param method 请求方法，默认get
  * @param config 请求配置 默认为空
  * @return function 返回axios实例
-*/
-const request = (api, params = {}, isFormdata = false,  method = AXIOS_METHOD_TYPET.GET, config = {}) => {
+ */
+const request = (api: string, params: any = {}, isFormdata = false,  method = AXIOS_METHOD_TYPET.GET, config?: any) => {
   method = method.toLocaleUpperCase();
   // get请求放在params中，其他请求放在body
   const data = method === 'GET' ? 'params' : 'data';
   // formdata转换
-  if(isFormdata) params = qs.stringify(params);
+  if (isFormdata) params = qs.stringify(params);
   // 这部分也可以放到defaults中去设置
   let headers = {
     // 'X-Requested-With': 'XMLHttpRequest',
     // 'Content-Type': 'application/json'
     isControl: true
   };
-  if (config.headers) {
+  if (config?.headers) {
     headers = {
       ...headers,
       ...config.headers
     };
   }
   return axios({
+    method: method as 'GET' | 'POST',
     baseURL,
     url: api,
-    method,
     [data]: params,
     headers,
-    withCredentials: true,
+    withCredentials: true
   });
 };
 // 添加请求拦截器
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use(config => {
   // 在发送请求之前做些什么
   return config;
-}, function (error) {
+}, error => {
   // 对请求错误做些什么
   return Promise.reject(error);
 });
 
 // 添加响应拦截器
-axios.interceptors.response.use(function (response) {
+axios.interceptors.response.use(response => {
   // 对响应数据做点什么
   return new Promise((resolve, reject) => {
     let data = response.data;
     const { code, message: msg } = data;
-    if(code === notAuthCode) {
+    if (code === notAuthCode) {
       const { origin, pathname } = window.location;
       window.location.href = `${origin}${pathname}#/login`;
       return;
-    } else if(code !== succCode) {
-      message.error(msg)
+    } else if (code !== succCode) {
+      message.error(msg);
       return reject(data);
     }
     resolve(data);
-  })
-}, function (error) {
+  });
+}, error => {
   let res = error.response || {};
   let data = res.data || {};
   message.error(data.message || '网络连接中断');

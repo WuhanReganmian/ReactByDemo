@@ -1,14 +1,19 @@
-import React, {useState, Suspense} from 'react';
+import React, { useState, Suspense } from 'react';
 import Head from './Head';
 import AsideMenu from './AsideMenu';
-import '@/Style/layout.scss';
-import routes from '@/Router';
-import fetch from '@/Api';
-import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import 'src/Style/layout.scss';
+import routes from 'src/Router';
+import fetch from 'src/Api';
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useRequest } from '@umijs/hooks';
 import { Breadcrumb, Spin } from 'antd';
 
 const { getMenuList } = fetch;
+
+interface BreadV {
+  name: string;
+  href?: string;
+}
 
 // 加载中转个圈
 function Loading() {
@@ -16,21 +21,21 @@ function Loading() {
     <div style={{ width: '100%', height: 500, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Spin />
     </div>
-  )
+  );
 }
 
 function Layout() {
-  const { data: menuList } = useRequest(getMenuList, { formatResult: data => data.result || [] })
-  const [menuCheck, setMenuCheck] = useState(20000);
-  const [bread, setBread] = useState([])
+  const [menuCheck, setMenuCheck] = useState<number>(20000);
+  const [bread, setBread] = useState<BreadV[]>([]);
+  const { data: menuList } = useRequest(getMenuList, { formatResult: data => data.result || [] }); // 接口：获取菜单
 
-  const onChangeNav = id => {
-    setMenuCheck(id)
-  }
+  const onChangeNav = (id: number) => {
+    setMenuCheck(id);
+  };
 
-  const changeBread = data => {
-    setBread(data || [])
-  }
+  const changeBread = (data: BreadV[]) => {
+    setBread(data || []);
+  };
 
   return (
     <div className="layoutClass">
@@ -57,7 +62,7 @@ function Layout() {
                             key={item.path}
                             path={item.path}
                             render={props => <item.component bread={changeBread} {...props} />} />
-                        )
+                        );
                       })
                     }
                     <Redirect to='/404' />
@@ -69,7 +74,7 @@ function Layout() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Layout;
