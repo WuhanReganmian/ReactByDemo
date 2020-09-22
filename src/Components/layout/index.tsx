@@ -1,19 +1,24 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import Head from './Head';
 import AsideMenu from './AsideMenu';
 import 'src/Style/layout.scss';
 import routes from 'src/Router';
 import fetch from 'src/Api';
-import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useRequest } from '@umijs/hooks';
 import { Breadcrumb, Spin } from 'antd';
 
-const { getMenuList } = fetch;
+const { getMenuList, getUserDetail } = fetch;
 
 interface BreadV {
   name: string;
   href?: string;
 }
+
+export let headConfig = {
+  sign: '',
+  route: ''
+};
 
 // 加载中转个圈
 function Loading() {
@@ -27,7 +32,27 @@ function Loading() {
 function Layout() {
   const [menuCheck, setMenuCheck] = useState<number>(20000);
   const [bread, setBread] = useState<BreadV[]>([]);
-  const { data: menuList } = useRequest(getMenuList, { formatResult: data => data.result || [] }); // 接口：获取菜单
+  const { data: menuList, run: getMenuRun } = useRequest(getMenuList, { formatResult: data => data.result || [], manual: true }); // 接口：获取菜单
+  const history = useHistory();
+
+  useEffect(() => { // 先获取数据添加进请求头
+    async function init() {
+      await getUserDetail().then((res: ApiRes) => {
+        const { enterpriseId } = res.result || {};
+        headConfig.sign = enterpriseId;
+        headConfig.route = history.location.pathname;
+      });
+      getMenuRun();
+    }
+    init();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => { // 路由变化时更改请求头数据
+    history.listen(routes => {
+      headConfig.route = routes.pathname;
+    });
+  }, [history]);
 
   const onChangeNav = (id: number) => {
     setMenuCheck(id);

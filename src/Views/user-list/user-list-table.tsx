@@ -206,7 +206,7 @@ function UserListTable(props: TableList) {
   );
 
   return (
-    <>
+    <div className="user-list-table">
       <Table
         rowSelection={{
           type: "checkbox"
@@ -214,8 +214,7 @@ function UserListTable(props: TableList) {
         dataSource={props.tableData}
         rowKey={record => record.id}
         pagination={false}
-        loading={props.loading}
-        rowClassName="user-list-table">
+        loading={props.loading}>
         { getHeadBody() }
         <Column
           title={lastTitle}
@@ -232,7 +231,7 @@ function UserListTable(props: TableList) {
           marginTop: 16,
           textAlign: 'right'
         }} />
-    </>
+    </div>
   );
 }
 

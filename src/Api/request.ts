@@ -2,6 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import qs from 'qs';
 import { baseURL, succCode, notAuthCode } from 'src/Config';
+import { headConfig } from 'src/Components/layout';
 
 // 请求方法
 export const AXIOS_METHOD_TYPET = {
@@ -20,24 +21,18 @@ export const AXIOS_METHOD_TYPET = {
  * @param config 请求配置 默认为空
  * @return function 返回axios实例
  */
-const request = (api: string, params: any = {}, isFormdata = false,  method = AXIOS_METHOD_TYPET.GET, config?: any) => {
+const request = async (api: string, params: any = {}, isFormdata = false,  method = AXIOS_METHOD_TYPET.GET, config: any) => {
   method = method.toLocaleUpperCase();
   // get请求放在params中，其他请求放在body
   const data = method === 'GET' ? 'params' : 'data';
   // formdata转换
   if (isFormdata) params = qs.stringify(params);
-  // 这部分也可以放到defaults中去设置
+  // 配置请求头
   let headers = {
-    // 'X-Requested-With': 'XMLHttpRequest',
-    // 'Content-Type': 'application/json'
-    isControl: true
+    isControl: true,
+    ...headConfig,
+    ...config
   };
-  if (config?.headers) {
-    headers = {
-      ...headers,
-      ...config.headers
-    };
-  }
   return axios({
     method: method as 'GET' | 'POST',
     baseURL,
@@ -75,7 +70,13 @@ axios.interceptors.response.use(response => {
 }, error => {
   let res = error.response || {};
   let data = res.data || {};
+  if (data.code === notAuthCode) {
+    const { origin, pathname } = window.location;
+    window.location.href = `${origin}${pathname}#/login`;
+    return;
+  }
   message.error(data.message || '网络连接中断');
   return Promise.reject(data);
 });
+
 export default request;

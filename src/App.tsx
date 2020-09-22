@@ -1,4 +1,4 @@
-import React, {lazy, Suspense} from 'react';
+import React, { lazy, Suspense } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 const Layout = lazy(() => import('./Components/layout/index'));

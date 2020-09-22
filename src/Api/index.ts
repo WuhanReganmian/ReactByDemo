@@ -3,7 +3,8 @@ import getFetch from './getFetch';
 let api = {
   login: '/login', // 登录
   getEnterprise: '/list-enterprise-by-phone', // 根据电话号码查商户
-  getMenuList: '/login-user-menu' // 头部菜单
+  getMenuList: '/login-user-menu', // 头部菜单
+  getUserDetail: '/get-login-user-info' // 获取用户信息
 };
 let api1 = {
   /* 用户列表 */
@@ -78,8 +79,8 @@ let api1 = {
   }
 };
 
-let doApi = getFetch(api, '/gic-auth-web');
-let doApi1 = getFetch(api1, '/member-config');
+let doApi = getFetch(api, '/gic-auth-web', 'damo-system');
+let doApi1 = getFetch(api1, '/member-config', 'memberfour');
 
 export default {
   ...doApi,
