@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react';
 import { Menu, Dropdown, Button } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { LoginOutlined } from '@ant-design/icons';
+import fetch from 'src/Api';
+
+const { logout } = fetch;
 
 interface MenuV {
   isShow: number;
@@ -75,6 +79,12 @@ function Head(props: HeadProp) {
     window.open('https://github.com/WuhanReganmian/ReactByDemo');
   };
 
+  const toLogout = () => {
+    logout().then(() => {
+      history.push('/login');
+    });
+  };
+
   return (
     <div className="headClass">
       <div className="headOption">
@@ -95,7 +105,10 @@ function Head(props: HeadProp) {
           })
         }
       </div>
-      <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}>0.0</Button>
+      <div className="headOption">
+        <LoginOutlined style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: 22, marginRight: 20 }} onClick={toLogout} />
+        <Button type="text" style={{ color: 'rgba(255, 255, 255, 0.6)' }} onClick={toGithub}>0.0</Button>
+      </div>
     </div>
   );
 }
