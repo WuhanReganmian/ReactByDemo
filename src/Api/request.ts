@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { message } from 'antd';
 import qs from 'qs';
-import { baseURL, succCode, notAuthCode } from 'src/Config';
-import { headConfig } from 'src/Components/layout';
+import { baseURL, succCode, notAuthCode, headConfig } from 'src/Config';
 
 // 请求方法
 export const AXIOS_METHOD_TYPET = {
@@ -30,7 +29,6 @@ const request = async (api: string, params: any = {}, isFormdata = false,  metho
   // 配置请求头
   let headers = {
     isControl: true,
-    ...headConfig,
     ...config
   };
   return axios({
@@ -45,6 +43,10 @@ const request = async (api: string, params: any = {}, isFormdata = false,  metho
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
   // 在发送请求之前做些什么
+  config.headers = {
+    ...config.headers,
+    ...headConfig
+  };
   return config;
 }, error => {
   // 对请求错误做些什么
