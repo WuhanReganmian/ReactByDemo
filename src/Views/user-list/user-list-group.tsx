@@ -37,23 +37,23 @@ function UserGroup(props: GroupP) { // 分组
    });
   const { run: newGroup } = useRequest(addGroupList, { // 新建分组接口
     manual: true,
-    onSuccess: _ => {
+    onSuccess: () => {
       getGroupRun();
       message.success('新建成功');
       setGroupVisible(false);
       setGroupLoading(false);
     },
-    onError: _ => setGroupLoading(false)
+    onError: () => setGroupLoading(false)
   });
   const { run: saveGroup } = useRequest(saveGroupList, { // 保存分组接口
     manual: true,
-    onSuccess: _ => {
+    onSuccess: () => {
       getGroupRun();
       message.success('保存成功');
       setGroupVisible(false);
       setGroupLoading(false);
     },
-    onError: _ => setGroupLoading(false)
+    onError: () => setGroupLoading(false)
   });
 
   const changeActive = useCallback((id: string) => { // 切换分组
@@ -182,7 +182,9 @@ function UserGroup(props: GroupP) { // 分组
             label="人群筛选">
             <Input />
           </Form.Item>
-          <GroupAccount accountVal={groupForm.getFieldValue('account')} />
+          {
+            groupVisible && <GroupAccount accountVal={groupForm.getFieldValue('account')} />
+          }
         </Form>
       </Modal>
 

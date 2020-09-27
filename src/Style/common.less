@@ -284,3 +284,31 @@ input:focus {
   box-shadow: none;
   outline: none;
 }
+
+header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #303133;
+}
+
+.tooltip-icon {
+  font-weight: inherit;
+  padding: 2px 0;
+  border-bottom: 1px dashed #2f54ed;
+}
+
+.state-point {
+  display: flex;
+  align-items: center;
+}
+.state-point::before {
+  content: "";
+  display: inline-block;
+  margin-right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+}
+.state-point-success::before {
+  background-color: #52c41a;
+}

@@ -77,7 +77,9 @@ let api1 = {
     url: '/select-ECU-detail', // 获取ECU详情
     method: 'post',
     useFormData: true
-  }
+  },
+  /* 会员卡配置 */
+  queryMembercardList: '/card-config/get-list' // 会员卡分页查询
 };
 
 let doApi = getFetch(api, '/gic-auth-web', 'damo-system');

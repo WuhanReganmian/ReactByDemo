@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Radio, Select } from 'antd';
 import fetch from 'src/Api';
+import { useRequest } from '@umijs/hooks';
 import 'src/Style/components.scss';
 
 const { getAdminGroupList } = fetch;
@@ -11,16 +12,15 @@ interface GroupAccountType {
 }
 
 function GroupAccount(props: GroupAccountType) {
-  const [accountList, setAccountList] = useState([]);
-  const [showOptions, setShowOptions] = useState(1);
-
-  useEffect(() => {
-    getAdminGroupList().then((res: ApiRes) => {
+  const [accountList, setAccountList] = useState<any[]>([]);
+  const [showOptions, setShowOptions] = useState<number>(1);
+  useRequest(getAdminGroupList, {
+    onSuccess: (res: ApiRes) => {
       let { result } = res.result || [];
       let options = result.map((item: any) => <Option key={item.enterUserGroupName} value={item.enterUserGroupId}>{item.enterUserGroupName}</Option>);
       setAccountList(options);
-    });
-  }, []);
+    }
+  });
 
   useEffect(() => {
     setShowOptions(props.accountVal);

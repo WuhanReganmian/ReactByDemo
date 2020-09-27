@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from 'react';
+import Loading from 'src/Components/Loading';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 const Layout = lazy(() => import('./Components/layout/index'));
@@ -7,7 +8,7 @@ const Blank = lazy(() => import('./Components/Blank'));
 
 function App() {
   return (
-    <Suspense fallback={<div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 20 }}>Loading.....</div>}>
+    <Suspense fallback={<Loading />}>
       <Router>
         <Switch>
           <Route path='/' exact render={() => <Redirect to='/user-list/user-list' />} />

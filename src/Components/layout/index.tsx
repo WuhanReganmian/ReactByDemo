@@ -1,28 +1,21 @@
-import React, { useState, Suspense, useEffect } from 'react';
-import Head from './Head';
-import AsideMenu from './AsideMenu';
+import React, { useState, Suspense, useEffect, lazy } from 'react';
 import 'src/Style/layout.scss';
 import routes from 'src/Router';
 import fetch from 'src/Api';
 import { HashRouter as Router, Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useRequest } from '@umijs/hooks';
-import { Breadcrumb, Spin } from 'antd';
+import { Breadcrumb } from 'antd';
 import { headConfig } from 'src/Config';
+import Loading from '../Loading';
 
 const { getMenuList, getUserDetail } = fetch;
+
+const AsideMenu = lazy(() => import('./AsideMenu'));
+const Head = lazy(() => import('./Head'));
 
 interface BreadV {
   name: string;
   href?: string;
-}
-
-// 加载中转个圈
-function Loading() {
-  return (
-    <div style={{ width: '100%', height: 500, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Spin />
-    </div>
-  );
 }
 
 function Layout() {
@@ -57,9 +50,13 @@ function Layout() {
 
   return (
     <div className="layoutClass">
-      <Head menu={menuList} menuCheck={menuCheck} onChange={onChangeNav} />
+      <Suspense fallback={<Loading />}>
+        <Head menu={menuList} menuCheck={menuCheck} onChange={onChangeNav} />
+      </Suspense>
       <div className="layoutContent">
-        <AsideMenu menu={menuList} menuCheck={menuCheck} />
+        <Suspense fallback={<Loading />}>
+          <AsideMenu menu={menuList} menuCheck={menuCheck} />
+        </Suspense>
         <div className="layoutContext">
           <div className="breadCrumb">
             <Breadcrumb separator=">">
