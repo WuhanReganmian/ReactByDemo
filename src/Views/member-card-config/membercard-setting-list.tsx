@@ -17,19 +17,32 @@ const bread = [
 
 function MembercardSettingList(props: P) {
   // eslint-disable-next-line
-  const [membercardTable, setMembercardTable] = useState([]);
-  useRequest(() => {
-    return queryMembercardList();
+  const [membercardTable, setMembercardTable] = useState<any[]>([]);
+  const [activeBox, setActiveBox] = useState<string>(''); // 选中的id
+  useRequest(queryMembercardList, {
+    onSuccess: (res: ApiRes) => {
+      const { result } = res.result || {};
+
+      setMembercardTable(result || []);
+
+      if (!activeBox && result?.length) { // 默认选中
+        setActiveBox(result[0].cardConfigId);
+      }
+    }
   });
 
   useLayoutEffect(() => {
     props.bread(bread);
   }, [props]);
 
+  const changeMembercard = (id: string) => {
+    setActiveBox(id);
+  };
+
   return (
     <div className="membercard-setting-list">
       <Suspense fallback={<Loading />}>
-        <MembercardList />
+        <MembercardList table={membercardTable} activeBox={activeBox} changeActive={changeMembercard} />
         <Suspense fallback={<Loading />}>
           <MembercardSettingStrategy />
         </Suspense>

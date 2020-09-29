@@ -87,7 +87,7 @@ export type HeadArr = (HeadColV | HeadListV)[];
 
 // 修改表格头Modal
 function HeadEditModal(props: HeadModalP) {
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const domainList = useRef<DomainV[]>([]); // 接口获取的域列表
   const [userListFieldId, setUserListFieldId] = useState<string>(''); // 字段id
 
