@@ -20,3 +20,10 @@ declare interface IterateS {
 declare interface IterateN {
   [_: number]: any
 }
+
+declare interface ColumnV {
+  title: string;
+  key: any;
+  dataIndex?: string;
+  render?: (a: any, b: any, c: any) => any;
+}

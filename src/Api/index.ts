@@ -79,7 +79,8 @@ let api1 = {
     useFormData: true
   },
   /* 会员卡配置 */
-  queryMembercardList: '/card-config/get-list' // 会员卡分页查询
+  queryMembercardList: '/card-config/get-list', // 会员卡分页查询
+  queryMembercardStrategyList: '/scene/get-card-strategy' // 获取单张卡开卡场景
 };
 
 let doApi = getFetch(api, '/gic-auth-web', 'damo-system');

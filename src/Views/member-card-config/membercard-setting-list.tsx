@@ -44,7 +44,7 @@ function MembercardSettingList(props: P) {
       <Suspense fallback={<Loading />}>
         <MembercardList table={membercardTable} activeBox={activeBox} changeActive={changeMembercard} />
         <Suspense fallback={<Loading />}>
-          <MembercardSettingStrategy />
+          <MembercardSettingStrategy cardConfigId={activeBox} />
         </Suspense>
       </Suspense>
     </div>
