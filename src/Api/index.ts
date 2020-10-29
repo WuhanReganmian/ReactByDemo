@@ -80,7 +80,18 @@ let api1 = {
   },
   /* 会员卡配置 */
   queryMembercardList: '/card-config/get-list', // 会员卡分页查询
-  queryMembercardStrategyList: '/scene/get-card-strategy' // 获取单张卡开卡场景
+  queryMembercardStrategyList: '/scene/get-card-strategy', // 获取单张卡开卡场景
+  /* 会员等级 */
+  queryMemberLevelList: {
+    url: '/query-grade-config-list', // 获取等级列表
+    method: 'post',
+    useFormData: true
+  },
+  delMemberLevelList: {
+    url: '/del-grade-config', // 逻辑删除
+    method: 'post',
+    useFormData: true
+  }
 };
 
 let doApi = getFetch(api, '/gic-auth-web', 'damo-system');

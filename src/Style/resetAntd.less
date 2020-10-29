@@ -12,3 +12,44 @@
 .ant-form-item-label > label {
   color: #606266;
 }
+
+// loading
+.loading-style {
+  margin: 20px;
+  display: inline-flex;
+  align-items: center;
+  height: 50px;
+}
+.loading-style span {
+  display: inline-block;
+  width: 6px;
+  height: 30px;
+  border-radius: 3px;
+  margin:0 3px;
+  background-color: #2f54eb;
+  animation: loading-style1 1s ease 0s infinite;
+}
+.loading-style span:nth-child(2){
+  animation-delay: 0.2s;
+}
+.loading-style span:nth-child(3){
+  animation-delay: 0.4s;
+}
+.loading-style span:nth-child(4){
+  animation-delay: 0.6s;
+}
+.loading-style span:nth-child(5){
+  animation-delay: 0.8s;
+}
+@keyframes loading-style1 {
+  0%,
+  100% {
+      height: 30px;
+      background-color: #2f54eb;
+  }
+
+  50% {
+      height: 50px;
+      background-color: lightskyblue;
+  }
+}

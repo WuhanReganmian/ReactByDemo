@@ -49,5 +49,10 @@
     flex: 1;
     height: 100%;
     overflow-y: auto;
+    .membercard-style {
+      width: 200px;
+      height: 99px;
+      border-radius: 4px;
+    }
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Spin } from 'antd';
 
 const Style = {
   width: '100%',
@@ -12,7 +11,13 @@ const Style = {
 function Loading() {
   return (
     <div style={Style}>
-      <Spin />
+      <div className="loading-style">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   );
 }
