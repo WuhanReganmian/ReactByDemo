@@ -16,7 +16,9 @@
     "arrow-parens": [true, "ban-single-arg-parens"], // 单参数不加括号
     "no-parameter-reassignment": false, // 允许对参数再赋值
     "quotemark": false, // 不限制引号
-    "no-magic-numbers": false // 可以使用魔法数字
+    "no-magic-numbers": false, // 可以使用魔法数字
+    "no-non-null-assertion": false, // 禁止使用非空断言
+    "no-unused-expression": false // 禁止无用的表达式
   },
   "rulesDirectory": []
 }

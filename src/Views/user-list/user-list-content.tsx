@@ -98,7 +98,7 @@ function HeadEditModal(props: HeadModalP) {
         case 'assign':
           return value;
         case 'update':
-          state[(i as number)].checked = !check;
+          state[i!].checked = !check;
           return [...state];
         default:
           throw new Error();
@@ -237,8 +237,8 @@ function HeadEditModal(props: HeadModalP) {
     domainFields.forEach((item: DomainFieldV) => {
       let areaId = item.areaId;
       let domainData = domainList.current?.find((item: DomainV) => item.areaId === areaId);
-      let prefix = (domainData as DomainV).prefix;
-      let cuType = (domainData as DomainV).cuType;
+      let prefix = domainData!.prefix;
+      let cuType = domainData!.cuType;
       let bool = false;
       let array: any[] = [];
       item.propNames.forEach(ele => {
@@ -283,7 +283,7 @@ function HeadEditModal(props: HeadModalP) {
       let num = 0;
       domainFields[index].propNames.forEach((item: FieldV) => item.checked && num++);
       let domainData = (domainList.current || []).find(item => item.areaId === val);
-      let cuType = (domainData as DomainV).cuType;
+      let cuType = domainData!.cuType;
       changeDomainFieldsList({cuType}).then((res: ApiRes) => {
         setDomainFields({ type: 'changeDomain', value: { areaId: val, propNames: res.result || [], domainIndex: index } });
       });
@@ -343,7 +343,7 @@ function HeadEditModal(props: HeadModalP) {
     setDomainFields({ type: 'push', value: { areaId: '', propNames: [] } });
     setTimeout(() => {
       let maxBox = document.querySelector('.maxBox');
-      (maxBox as Element).scrollTop = (maxBox as Element).scrollHeight;
+      maxBox!.scrollTop = maxBox!.scrollHeight;
     }, 0);
   };
 

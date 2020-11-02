@@ -70,10 +70,10 @@ function AsideMenu(props: HeadProp) {
   useEffect(() => { // 默认选中
     const check = getUrl(routeData, history.location.pathname);
     if (!(check as undefined)) return;
-    setDefaultKey([ (check as UrlVal)?.menuId.toString() ]);
+    setDefaultKey([ check!?.menuId.toString() ]);
 
-    if (!openKey?.length && (check as UrlVal).level > 2 && (check as UrlVal).isShow) { // 第一次进来或者刷新，如果是子菜单则展开
-      setOpenKey([ (check as UrlVal)?.parentId.toString() ]);
+    if (!openKey?.length && check!.level > 2 && check!.isShow) { // 第一次进来或者刷新，如果是子菜单则展开
+      setOpenKey([ check!?.parentId.toString() ]);
     }
     // 不依赖openkey
     // eslint-disable-next-line
@@ -90,7 +90,7 @@ function AsideMenu(props: HeadProp) {
 
   const onOpenChange = (openKeys: any) => { // 点击菜单，收起其他展开的所有菜单
     const latestOpenKey = openKeys.find((key: string) => openKey.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey as string) === -1) {
+    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
       setOpenKey(openKeys);
     } else {
       setOpenKey(latestOpenKey ? [latestOpenKey] : []);
