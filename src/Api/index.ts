@@ -91,7 +91,10 @@ let api1 = {
     url: '/del-grade-config', // 逻辑删除
     method: 'post',
     useFormData: true
-  }
+  },
+  /* 开卡策略 */
+  queryAutoCardStrategyList: '/card-automatic-strategy/list-cardAutomatic-strategy', // 查询自动开卡策略列表
+  delAutoCardStrategyData: '/card-automatic-strategy/delete-cardAutomatic-strategy', // 删除自动开卡策略
 };
 
 let doApi = getFetch(api, '/gic-auth-web', 'damo-system');
